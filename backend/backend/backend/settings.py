@@ -46,9 +46,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-
-    'users.apps.UsersConfig',
-    'resources.apps.ResourcesConfig',
+    'resources',
+    'users'
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
