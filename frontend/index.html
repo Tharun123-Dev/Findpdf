@@ -428,7 +428,8 @@ footer{
         <a href="#roadmap">Roadmaps</a>
         <a href="#practice">Platforms</a>
         <a href="#faq">FAQ</a>
-        <a href="#login">Login</a>
+        <a onclick=login() >login</a>
+       
         </div>
 </nav>
 
@@ -508,12 +509,12 @@ footer{
     </div>
 
     <div class="chip-row">
-      <button class="chip">Python Basics</button>
-      <button class="chip">Django Projects</button>
-      <button class="chip">DBMS Notes</button>
-      <button class="chip">Previous Year Papers</button>
-      <button class="chip">Frontend Practice</button>
-      <button class="chip">Interview Questions</button>
+      <button class="chip"><a style="text-decoration: none; color:white" href="https://www.geeksforgeeks.org/python/python-programming-language-tutorial/">Python Basics</a></button>
+      <button class="chip"> <a style="text-decoration: none; color:white" href="https://www.geeksforgeeks.org/python/django-tutorial/">Python Basics</a>Django Projects</button>
+      <button class="chip"><a style="text-decoration: none; color:white" href="https://www.geeksforgeeks.org/dbms/dbms/"></a>DBMS Notes</button>
+      <button class="chip"><a style="text-decoration: none; color:white" href="https://www.geeksforgeeks.org/gate/original-gate-previous-year-question-papers-cse-and-it-gq/"></a>Previous Year Papers</button>
+      <button class="chip"><a style="text-decoration: none; color:white" href="https://www.geeksforgeeks.org/blogs/frontend-vs-backend/"></a>Frontend Practice</button>
+      <button class="chip"><a style="text-decoration: none; color:white" href="https://www.geeksforgeeks.org/blogs/soft-skills-interview-questions-and-answers/"></a>Interview Questions</button>
     </div>
   </div>
 </section>
@@ -757,6 +758,11 @@ window.addEventListener("scroll", () => {
   else backTop.classList.remove("show");
 });
 backTop.onclick = () => window.scrollTo({ top:0, behavior:"smooth" });
+
+
+function login(){
+    window.location.href="login.html"
+}
 </script>
 
 </body>
