@@ -205,7 +205,7 @@ summary{
     font-weight:600;
 }
 
-/* ================= FOOTER ================= */
+/* ================= FOOTER =================
 footer{
     padding:30px;
     text-align:center;
@@ -213,6 +213,113 @@ footer{
     color:#888;
     box-shadow:0 -15px 40px rgba(0,0,0,.9);
     font-size:0.86rem;
+} */
+
+
+.footer {
+  background: #000;
+  color: #ccc;
+  padding: 60px 20px 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated gradient line */
+.footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #00f0ff, #ff00ff, #00f0ff);
+  animation: slideLine 4s linear infinite;
+}
+
+@keyframes slideLine {
+  to {
+    left: 100%;
+  }
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+}
+
+.footer-box h3,
+.footer-box h4 {
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+.footer-box p {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Links */
+.footer-box ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-box ul li {
+  margin-bottom: 10px;
+}
+
+.footer-box ul li a {
+  color: #aaa;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.footer-box ul li a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: #00f0ff;
+  transition: width 0.4s ease;
+}
+
+.footer-box ul li a:hover {
+  color: #00f0ff;
+}
+
+.footer-box ul li a:hover::after {
+  width: 100%;
+}
+
+/* Social icons */
+.socials a {
+  display: inline-block;
+  margin-right: 12px;
+  font-size: 22px;
+  color: #aaa;
+  transition: transform 0.4s, color 0.4s, text-shadow 0.4s;
+}
+
+.socials a:hover {
+  color: #00f0ff;
+  transform: translateY(-6px) scale(1.2);
+  text-shadow: 0 0 10px #00f0ff;
+}
+
+/* Footer bottom text */
+.footer p {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 13px;
+  color: #666;
+}
+.footer:hover {
+  box-shadow: inset 0 0 80px rgba(0, 240, 255, 0.08);
+  transition: 0.6s;
 }
 
 /* ================= ANIM ================= */
@@ -660,9 +767,41 @@ footer{
   </div>
 </section>
 
-<footer>
-    © 2026 Student Resource Hub • Learn Together
+<footer class="footer">
+  <div class="footer-container">
+
+    <div class="footer-box">
+      <h3>Student Hub</h3>
+      <p>Upload, share & explore PDFs and Roadmaps for better learning.</p>
+    </div>
+
+    <div class="footer-box">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Upload PDF</a></li>
+        <li><a href="#">Roadmaps</a></li>
+        <li><a href="#">Login</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-box">
+      <h4>Connect</h4>
+      <div class="socials">
+        <a href="#">🌐</a>
+        <a href="#">📘</a>
+        <a href="#">📸</a>
+        <a href="#">🐦</a>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="copyright">
+    © 2026 Student Hub | Built with ❤️
+  </p>
 </footer>
+
 
 <button id="backTop">↑ Top</button>
 
