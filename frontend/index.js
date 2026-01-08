@@ -1,90 +1,113 @@
+// ================= CONFIG =================
 const BACKEND = "https://findpdf-c6cp.onrender.com";
 const API = BACKEND + "/api/";
 
-// ---------- PDF ----------
-document.getElementById("pdfForm").onsubmit = async (f) => {
-    f.preventDefault();
-    const formData = new FormData(f.target);
+// ================= HELPERS =================
+function openInNewTab(url) {
+    window.open(url, "_blank");
+}
+
+function forceDownload(url, filename) {
+    fetch(url)
+        .then(res => res.blob())
+        .then(blob => {
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+        })
+        .catch(err => console.error("Download failed:", err));
+}
+
+// ================= PDF SECTION =================
+let allPDFs = [];
+const PDF_LIMIT = 12;
+
+// Upload PDF
+document.getElementById("pdfForm")?.addEventListener("submit", async e => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
     try {
-        const res = await fetch(API + "pdfs/", { method: "POST", body: formData });
+        const res = await fetch(API + "pdfs/", {
+            method: "POST",
+            body: formData
+        });
+
         if (res.ok) {
-            f.target.reset();
+            e.target.reset();
             loadPDFs();
             alert("PDF uploaded successfully!");
         } else {
-            alert("Error uploading PDF. Status: " + res.status);
+            alert("PDF upload failed");
         }
-    } catch (error) {
-        alert("Failed to upload PDF: " + error.message);
+    } catch (err) {
+        alert("Upload error: " + err.message);
     }
-};
+});
 
-let allPDFs = [];
-
+// Load PDFs
 async function loadPDFs() {
     try {
         const res = await fetch(API + "pdfs/");
-        if (!res.ok) {
-            console.error("Error loading PDFs:", res.status);
-            return;
-        }
+        if (!res.ok) return;
 
-        allPDFs = await res.json();   // store globally
-        console.log("PDF DATA:", allPDFs);
+        allPDFs = await res.json();
 
-        // SORT A → Z
-        allPDFs = sortPDFsAlphabetically(allPDFs);
-        
+        // Sort A → Z
+        allPDFs.sort((a, b) =>
+            a.title.localeCompare(b.title, undefined, { sensitivity: "base" })
+        );
 
-        renderPDFs(allPDFs);          // render all initially
+        renderPDFs(allPDFs.slice(0, PDF_LIMIT));
     } catch (err) {
         console.error("PDF load failed:", err);
     }
 }
-function renderPDFs(pdfArray) {
-    document.getElementById("pdfList").innerHTML = pdfArray.map(p => `
+
+// Render PDFs
+function renderPDFs(list) {
+    document.getElementById("pdfList").innerHTML = list.map(p => `
         <div class="item">
             <h3>${p.title}</h3>
-            <img src="${p.image_url}" onclick="openImageInNewTab('${p.image_url}')">
-            <a href="${p.file_url}" target="_blank">📥 Open PDF</a>
+
+            <img src="${p.image_url}"
+                 onclick="openInNewTab('${p.image_url}')">
+
+            <a href="${p.file_url}" target="_blank">📖 Open PDF</a>
+
+            <a onclick="forceDownload('${p.file_url}', '${p.title}.pdf')">
+                📥 Download PDF
+            </a>
         </div>
     `).join("");
 }
+
+// Search PDFs
 function filterPDFs() {
-    const searchText = document
-        .getElementById("pdfSearch")
-        .value
-        .toLowerCase();
+    const text = document.getElementById("pdfSearch").value.toLowerCase().trim();
 
-    let filteredPDFs = allPDFs.filter(p =>
-        p.title.toLowerCase().includes(searchText)
+    if (text === "") {
+        renderPDFs(allPDFs.slice(0, PDF_LIMIT));
+        return;
+    }
+
+    const filtered = allPDFs.filter(p =>
+        p.title.toLowerCase().includes(text)
     );
 
-    // SORT FILTERED RESULTS
-    filteredPDFs = sortPDFsAlphabetically(filteredPDFs);
-
-    renderPDFs(filteredPDFs);
+    renderPDFs(filtered);
 }
 
-function sortPDFsAlphabetically(pdfArray) {
-    return pdfArray.sort((a, b) =>
-        a.title.localeCompare(b.title, undefined, { sensitivity: "base" })
-    );
-}
-
-
-// ---------- ROADMAP ----------
-// ---------- ROADMAP ----------
+// ================= ROADMAP SECTION =================
 let allRoadmaps = [];
+const ROADMAP_LIMIT = 12;
 
-
-function sortRoadmapsAlphabetically(arr) {
-    return arr.sort((a, b) =>
-        a.title.localeCompare(b.title, undefined, { sensitivity: "base" })
-    );
-}
-
-document.getElementById("roadmapForm").onsubmit = async (e) => {
+// Upload Roadmap
+document.getElementById("roadmapForm")?.addEventListener("submit", async e => {
     e.preventDefault();
     const formData = new FormData(e.target);
 
@@ -99,92 +122,85 @@ document.getElementById("roadmapForm").onsubmit = async (e) => {
             loadRoadmaps();
             alert("Roadmap uploaded successfully!");
         } else {
-            alert("Error uploading Roadmap. Status: " + res.status);
+            alert("Roadmap upload failed");
         }
-    } catch (error) {
-        alert("Failed to upload Roadmap: " + error.message);
+    } catch (err) {
+        alert("Upload error: " + err.message);
     }
-};
+});
 
+// Load Roadmaps
 async function loadRoadmaps() {
     try {
         const res = await fetch(API + "roadmaps/");
-        if (!res.ok) {
-            console.error("Error loading roadmaps");
-            return;
-        }
+        if (!res.ok) return;
 
         allRoadmaps = await res.json();
 
-        // SORT A → Z
-        allRoadmaps = sortRoadmapsAlphabetically(allRoadmaps);
+        // Sort A → Z
+        allRoadmaps.sort((a, b) =>
+            a.title.localeCompare(b.title, undefined, { sensitivity: "base" })
+        );
 
-        renderRoadmaps(allRoadmaps);
+        renderRoadmaps(allRoadmaps.slice(0, ROADMAP_LIMIT));
     } catch (err) {
         console.error("Roadmap load failed:", err);
     }
 }
 
+// Render Roadmaps
 function renderRoadmaps(list) {
     document.getElementById("roadmapList").innerHTML = list.map(r => `
         <div class="item">
             <h3>${r.title}</h3>
             <p>${r.description}</p>
-            <img src="${r.image_url}" onclick="openImageInNewTab('${r.image_url}')">
+
+            <img src="${r.image_url}"
+                 onclick="openInNewTab('${r.image_url}')">
+
+            <a onclick="forceDownload('${r.image_url}', '${r.title}.png')">
+                📥 Download Roadmap
+            </a>
         </div>
     `).join("");
 }
 
+// Search Roadmaps
 function filterRoadmaps() {
-    const searchText = document
-        .getElementById("roadmapSearch")
-        .value
-        .toLowerCase();
+    const text = document.getElementById("roadmapSearch").value.toLowerCase().trim();
 
-    let filtered = allRoadmaps.filter(r =>
-        r.title.toLowerCase().includes(searchText)
+    if (text === "") {
+        renderRoadmaps(allRoadmaps.slice(0, ROADMAP_LIMIT));
+        return;
+    }
+
+    const filtered = allRoadmaps.filter(r =>
+        r.title.toLowerCase().includes(text)
     );
 
-    filtered = sortRoadmapsAlphabetically(filtered);
     renderRoadmaps(filtered);
 }
 
-
-
-// ---------- BACK TO TOP ----------
+// ================= BACK TO TOP =================
 const backTop = document.getElementById("backTop");
 window.addEventListener("scroll", () => {
-  if (window.scrollY > 400) backTop.classList.add("show");
-  else backTop.classList.remove("show");
+    if (window.scrollY > 400) backTop?.classList.add("show");
+    else backTop?.classList.remove("show");
 });
-backTop.onclick = () => window.scrollTo({ top:0, behavior:"smooth" });
+backTop?.addEventListener("click", () =>
+    window.scrollTo({ top: 0, behavior: "smooth" })
+);
 
+// ================= AUTH =================
+function login() {
+    window.location.href = "login.html";
+}
+function logout() {
+    window.location.href = "login.html";
+}
 
-function login(){
-    window.location.href="login.html"
-}
-function logout(){
-    window.location.href="login.html"
-}
-window.onload = () => {
+// ================= INIT =================
+window.addEventListener("load", () => {
     loadPDFs();
     loadRoadmaps();
-};
-
-
-// scrolling purpose
-function brmOpenModal(card) {
-  const img = card.querySelector(".brm-card-img").src;
-  const title = card.querySelector(".brm-card-title").innerText;
-  const desc = card.querySelector(".brm-card-desc").innerText;
-
-  document.getElementById("brmModalImg").src = img;
-  document.getElementById("brmModalTitle").innerText = title;
-  document.getElementById("brmModalDesc").innerText = desc;
-
-  document.getElementById("brmModal").classList.add("active");
-}
-
-function brmCloseModal() {
-  document.getElementById("brmModal").classList.remove("active");
-}
+});
