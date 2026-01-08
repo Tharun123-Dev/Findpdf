@@ -23,6 +23,7 @@
         <a href="#practice">Platforms</a>
         <a href="#faq">FAQ</a>
         <a onclick=login() >login</a>
+        <a onclick=logout() >logout</a>
        
         </div>
 </nav>
@@ -106,6 +107,102 @@
 
 <!-- scrolling purpose -->
 
+<!-- MAIN CONTAINER (NO BODY STYLING USED) -->
+<div class="brm-container">
+
+  <!-- HEADER -->
+  <div class="brm-header">
+    <h1 class="brm-title">Books & Roadmaps</h1>
+    <p class="brm-subtitle">Hover to pause • Click to explore</p>
+  </div>
+
+  <!-- SCROLL SECTION -->
+  <div class="brm-scroll-wrapper">
+    <div class="brm-scroll-track">
+
+      <!-- CARD -->
+      <div class="brm-card" onclick="brmOpenModal(this)">
+        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" class="brm-card-img">
+        <div class="brm-card-body">
+          <h3 class="brm-card-title">Python Roadmap</h3>
+          <p class="brm-card-desc">Beginner to advanced Python learning path.</p>
+        </div>
+      </div>
+
+      <div class="brm-card" onclick="brmOpenModal(this)">
+        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794" class="brm-card-img">
+        <div class="brm-card-body">
+          <h3 class="brm-card-title">Web Development</h3>
+          <p class="brm-card-desc">HTML, CSS, JavaScript full roadmap.</p>
+        </div>
+      </div>
+
+      <div class="brm-card" onclick="brmOpenModal(this)">
+        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" class="brm-card-img">
+        <div class="brm-card-body">
+          <h3 class="brm-card-title">Frontend Engineer</h3>
+          <p class="brm-card-desc">React, UI design & performance skills.</p>
+        </div>
+      </div>
+
+      <!-- DUPLICATE FOR INFINITE LOOP -->
+      <div class="brm-card" onclick="brmOpenModal(this)">
+        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" class="brm-card-img">
+        <div class="brm-card-body">
+          <h3 class="brm-card-title">Python Roadmap</h3>
+          <p class="brm-card-desc">Beginner to advanced Python learning path.</p>
+        </div>
+      </div>
+
+       <!-- CARD -->
+      <div class="brm-card" onclick="brmOpenModal(this)">
+        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" class="brm-card-img">
+        <div class="brm-card-body">
+          <h3 class="brm-card-title">Python Roadmap</h3>
+          <p class="brm-card-desc">Beginner to advanced Python learning path.</p>
+        </div>
+      </div>
+
+      <div class="brm-card" onclick="brmOpenModal(this)">
+        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794" class="brm-card-img">
+        <div class="brm-card-body">
+          <h3 class="brm-card-title">Web Development</h3>
+          <p class="brm-card-desc">HTML, CSS, JavaScript full roadmap.</p>
+        </div>
+      </div>
+
+      <div class="brm-card" onclick="brmOpenModal(this)">
+        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" class="brm-card-img">
+        <div class="brm-card-body">
+          <h3 class="brm-card-title">Frontend Engineer</h3>
+          <p class="brm-card-desc">React, UI design & performance skills.</p>
+        </div>
+      </div>
+
+      <!-- DUPLICATE FOR INFINITE LOOP -->
+      <div class="brm-card" onclick="brmOpenModal(this)">
+        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" class="brm-card-img">
+        <div class="brm-card-body">
+          <h3 class="brm-card-title">Python Roadmap</h3>
+          <p class="brm-card-desc">Beginner to advanced Python learning path.</p>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="brm-modal-overlay" id="brmModal">
+    <div class="brm-modal-box">
+      <span class="brm-modal-close" onclick="brmCloseModal()">✖</span>
+      <img id="brmModalImg" class="brm-modal-img">
+      <h2 id="brmModalTitle"></h2>
+      <p id="brmModalDesc"></p>
+    </div>
+  </div>
+
+</div>
 
 
 <!-- TRENDING TOPICS -->

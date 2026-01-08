@@ -600,3 +600,143 @@ input[type="file"]::file-selector-button:active {
     background:#1b1b1b;
     color:#fff;
 }
+
+
+/* scrolling purpose */
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* MAIN CONTAINER */
+.brm-container {
+  background: radial-gradient(circle at top, #111, #000);
+  color: #fff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* HEADER */
+.brm-header {
+  text-align: center;
+  padding: 32px 16px;
+}
+
+.brm-title {
+  font-size: 2.3rem;
+  background: linear-gradient(90deg, #00f0ff, #7b61ff);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.brm-subtitle {
+  opacity: 0.7;
+  margin-top: 8px;
+}
+
+/* SCROLLER */
+.brm-scroll-wrapper {
+  overflow: hidden;
+  padding: 30px 0;
+}
+
+.brm-scroll-track {
+  display: flex;
+  gap: 20px;
+  animation: brmScroll 35s linear infinite;
+}
+
+.brm-scroll-wrapper:hover .brm-scroll-track {
+  animation-play-state: paused;
+}
+
+@keyframes brmScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* CARD */
+.brm-card {
+  min-width: 260px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: transform 0.4s, box-shadow 0.4s;
+}
+
+.brm-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 0 35px rgba(0,240,255,0.4);
+}
+
+.brm-card-img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 16px 16px 0 0;
+}
+
+.brm-card-body {
+  padding: 14px;
+}
+
+.brm-card-title {
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+.brm-card-desc {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+/* MODAL */
+.brm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.brm-modal-overlay.active {
+  display: flex;
+}
+
+.brm-modal-box {
+  background: rgba(20,20,20,0.9);
+  border-radius: 20px;
+  max-width: 420px;
+  width: 90%;
+  padding: 20px;
+  backdrop-filter: blur(18px);
+  animation: brmPopup 0.4s ease;
+}
+
+@keyframes brmPopup {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.brm-modal-img {
+  width: 100%;
+  border-radius: 14px;
+  margin-bottom: 15px;
+}
+
+.brm-modal-close {
+  float: right;
+  cursor: pointer;
+  opacity: 0.7;
+  font-size: 1.4rem;
+}
+
+.brm-modal-close:hover {
+  opacity: 1;
+}

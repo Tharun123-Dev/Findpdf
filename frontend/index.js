@@ -132,7 +132,28 @@ backTop.onclick = () => window.scrollTo({ top:0, behavior:"smooth" });
 function login(){
     window.location.href="login.html"
 }
+function logout(){
+    window.location.href="login.html"
+}
 window.onload = () => {
     loadPDFs();
     loadRoadmaps();
 };
+
+
+// scrolling purpose
+function brmOpenModal(card) {
+  const img = card.querySelector(".brm-card-img").src;
+  const title = card.querySelector(".brm-card-title").innerText;
+  const desc = card.querySelector(".brm-card-desc").innerText;
+
+  document.getElementById("brmModalImg").src = img;
+  document.getElementById("brmModalTitle").innerText = title;
+  document.getElementById("brmModalDesc").innerText = desc;
+
+  document.getElementById("brmModal").classList.add("active");
+}
+
+function brmCloseModal() {
+  document.getElementById("brmModal").classList.remove("active");
+}
