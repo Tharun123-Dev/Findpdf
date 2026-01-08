@@ -1,4 +1,4 @@
-const BACKEND = "http://127.0.0.1:8000";
+const BACKEND = "https://findpdf-c6cp.onrender.com";
 const API = BACKEND + "/api/";
 
 // ---------- PDF ----------
