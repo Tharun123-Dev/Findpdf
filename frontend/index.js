@@ -75,6 +75,15 @@ function sortPDFsAlphabetically(pdfArray) {
 
 // ---------- ROADMAP ----------
 // ---------- ROADMAP ----------
+let allRoadmaps = [];
+
+
+function sortRoadmapsAlphabetically(arr) {
+    return arr.sort((a, b) =>
+        a.title.localeCompare(b.title, undefined, { sensitivity: "base" })
+    );
+}
+
 document.getElementById("roadmapForm").onsubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -105,19 +114,41 @@ async function loadRoadmaps() {
             return;
         }
 
-        const data = await res.json();
+        allRoadmaps = await res.json();
 
-        document.getElementById("roadmapList").innerHTML = data.map(r => `
-            <div class="item">
-                <h3>${r.title}</h3>
-                <p>${r.description}</p>
-                <img src="${r.image_url}" onclick="openImageInNewTab('${r.image_url}')">
-            </div>
-        `).join("");
+        // SORT A → Z
+        allRoadmaps = sortRoadmapsAlphabetically(allRoadmaps);
+
+        renderRoadmaps(allRoadmaps);
     } catch (err) {
         console.error("Roadmap load failed:", err);
     }
 }
+
+function renderRoadmaps(list) {
+    document.getElementById("roadmapList").innerHTML = list.map(r => `
+        <div class="item">
+            <h3>${r.title}</h3>
+            <p>${r.description}</p>
+            <img src="${r.image_url}" onclick="openImageInNewTab('${r.image_url}')">
+        </div>
+    `).join("");
+}
+
+function filterRoadmaps() {
+    const searchText = document
+        .getElementById("roadmapSearch")
+        .value
+        .toLowerCase();
+
+    let filtered = allRoadmaps.filter(r =>
+        r.title.toLowerCase().includes(searchText)
+    );
+
+    filtered = sortRoadmapsAlphabetically(filtered);
+    renderRoadmaps(filtered);
+}
+
 
 
 // ---------- BACK TO TOP ----------
