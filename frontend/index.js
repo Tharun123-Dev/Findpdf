@@ -19,6 +19,8 @@ document.getElementById("pdfForm").onsubmit = async (f) => {
     }
 };
 
+let allPDFs = [];
+
 async function loadPDFs() {
     try {
         const res = await fetch(API + "pdfs/");
@@ -27,20 +29,49 @@ async function loadPDFs() {
             return;
         }
 
-        const data = await res.json();
-        console.log("PDF DATA:", data); // debug
+        allPDFs = await res.json();   // store globally
+        console.log("PDF DATA:", allPDFs);
 
-        document.getElementById("pdfList").innerHTML = data.map(p => `
-            <div class="item">
-                <h3>${p.title}</h3>
-                <img src="${p.image_url}" onclick="openImageInNewTab('${p.image_url}')">
-                <a href="${p.file_url}" target="_blank">📥 Open PDF</a>
-            </div>
-        `).join("");
+        // SORT A → Z
+        allPDFs = sortPDFsAlphabetically(allPDFs);
+        
+
+        renderPDFs(allPDFs);          // render all initially
     } catch (err) {
         console.error("PDF load failed:", err);
     }
 }
+function renderPDFs(pdfArray) {
+    document.getElementById("pdfList").innerHTML = pdfArray.map(p => `
+        <div class="item">
+            <h3>${p.title}</h3>
+            <img src="${p.image_url}" onclick="openImageInNewTab('${p.image_url}')">
+            <a href="${p.file_url}" target="_blank">📥 Open PDF</a>
+        </div>
+    `).join("");
+}
+function filterPDFs() {
+    const searchText = document
+        .getElementById("pdfSearch")
+        .value
+        .toLowerCase();
+
+    let filteredPDFs = allPDFs.filter(p =>
+        p.title.toLowerCase().includes(searchText)
+    );
+
+    // SORT FILTERED RESULTS
+    filteredPDFs = sortPDFsAlphabetically(filteredPDFs);
+
+    renderPDFs(filteredPDFs);
+}
+
+function sortPDFsAlphabetically(pdfArray) {
+    return pdfArray.sort((a, b) =>
+        a.title.localeCompare(b.title, undefined, { sensitivity: "base" })
+    );
+}
+
 
 // ---------- ROADMAP ----------
 // ---------- ROADMAP ----------
