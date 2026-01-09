@@ -52,6 +52,10 @@ nav a:hover{color:#fff}
 .spacer{height:90px}
 
 /* ================= HERO ================= */
+/* ===============================
+   ORIGINAL CSS (UNCHANGED)
+   =============================== */
+
 .hero{
     text-align:center;
     padding:140px 20px 60px;
@@ -67,6 +71,143 @@ nav a:hover{color:#fff}
     max-width:480px;
     margin-inline:auto;
 }
+
+/* ===============================
+   EXTENDED FEATURES
+   =============================== */
+
+/* Center Content */
+.hero{
+    min-height:70vh;
+    display:inline-block;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(180deg,#000,#0a0a0a);
+    border-radius:18px;
+    box-shadow:
+        0 0 30px rgba(0,255,255,.15),
+        0 30px 80px rgba(0,0,0,.9);
+    transition:.5s ease;
+    animation:fadeUp 1.4s ease, heroFloat 6s ease-in-out infinite;
+    width: 100%;
+}
+
+.hero:hover{
+    transform:translateY(-10px) scale(1.01);
+    box-shadow:
+        0 0 50px rgba(0,255,255,.4),
+        0 40px 100px rgba(0,0,0,1);
+}
+
+/* Content Wrapper */
+.hero-content{
+    max-width:720px;
+    text-align:center;
+}
+
+/* Headline Glow */
+.hero h1{
+    color:#fff;
+    text-shadow:
+        0 0 10px rgba(0,255,255,.4),
+        0 0 40px rgba(0,255,255,.2);
+    animation:textGlow 3s ease-in-out infinite alternate;
+}
+
+/* Paragraph Animation */
+.hero p{
+    animation:fadeSlide 1.6s ease forwards;
+}
+
+/* CTA Link */
+.hero-link{
+    display:inline-block;
+    margin-top:28px;
+    padding:14px 36px;
+    border-radius:30px;
+    font-weight:600;
+    letter-spacing:.04em;
+    text-decoration:none;
+    color:#00ffff;
+    background:rgba(0,255,255,.08);
+    border:1px solid rgba(0,255,255,.3);
+    backdrop-filter:blur(10px);
+    box-shadow:0 0 25px rgba(0,255,255,.25);
+    transition:.4s ease;
+    position:relative;
+    overflow:hidden;
+}
+
+/* Shine Effect */
+.hero-link::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    left:-120%;
+    background:linear-gradient(
+        120deg,
+        transparent,
+        rgba(0,255,255,.4),
+        transparent
+    );
+    transition:.6s;
+}
+
+.hero-link:hover::before{
+    left:120%;
+}
+
+.hero-link:hover{
+    background:#00ffff;
+    color:#000;
+    transform:translateY(-4px) scale(1.05);
+    box-shadow:0 0 50px rgba(0,255,255,.7);
+}
+
+/* ===============================
+   ANIMATIONS
+   =============================== */
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes heroFloat{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-12px); }
+}
+
+@keyframes textGlow{
+    from{
+        text-shadow:
+            0 0 8px rgba(0,255,255,.3),
+            0 0 25px rgba(0,255,255,.15);
+    }
+    to{
+        text-shadow:
+            0 0 18px rgba(0,255,255,.6),
+            0 0 50px rgba(0,255,255,.4);
+    }
+}
+
+@keyframes fadeSlide{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:.8;
+        transform:translateY(0);
+    }
+}
+
 
 /* ================= SECTION ================= */
 section{padding:80px 8%}
