@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>StudentHub - Ultimate Student Resource Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* ---------- BASE THEME ---------- */
+    :root {
+      --bg: #050509;
+      --bg-alt: #0d0d16;
+      --card: rgba(255, 255, 255, 0.06);
+      --card-border: rgba(255, 255, 255, 0.18);
+      --text-main: #f5f5f5;
+      --text-muted: #a0a0b8;
+      --neon-pink: #ff0099;
+      --neon-blue: #00e0ff;
+      --neon-green: #00ff85;
+      --neon-purple: #8900ff;
+      --neon-orange: #ff6b00;
+      --radius-xl: 24px;
+      --shadow-soft: 0 0 40px rgba(0, 0, 0, 0.7);
+      --shadow-neon: 0 0 60px rgba(0, 224, 255, 0.6);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top left, #15152a 0%, #050509 55%, #000 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ---------- ANIMATED BACKGROUND ---------- */
+    .bg-orbit {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    .bg-orbit span {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(40px);
+      opacity: 0.55;
+      mix-blend-mode: screen;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .bg-orbit span:nth-child(1) {
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, var(--neon-blue), transparent 70%);
+      top: -80px;
+      left: -40px;
+    }
+
+    .bg-orbit span:nth-child(2) {
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, var(--neon-pink), transparent 70%);
+      top: 50%;
+      right: -100px;
+      animation-delay: -5s;
+    }
+
+    .bg-orbit span:nth-child(3) {
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, var(--neon-green), transparent 70%);
+      bottom: -120px;
+      left: 20%;
+      animation-delay: -10s;
+    }
+
+    .bg-orbit span:nth-child(4) {
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, var(--neon-purple), transparent 70%);
+      top: 20%;
+      right: 10%;
+      animation-delay: -2s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+      33% { transform: translate3d(20px, -30px, 0) scale(1.05) rotate(120deg); }
+      66% { transform: translate3d(-15px, 20px, 0) scale(0.98) rotate(240deg); }
+    }
+
+    /* ---------- MAIN CONTAINER ---------- */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 50px 20px 100px;
+    }
+
+    /* ---------- HERO SECTION ---------- */
+    .hero {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: radial-gradient(circle at 0 0, rgba(28, 22, 54, 0.9), transparent);
+      margin-bottom: 24px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .badge-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: conic-gradient(var(--neon-blue), var(--neon-pink), var(--neon-green));
+      padding: 2px;
+    }
+
+    .badge-dot-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #050509;
+    }
+
+    .hero-title {
+      font-size: clamp(40px, 7vw, 60px);
+      line-height: 1.1;
+      margin-bottom: 20px;
+      text-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    }
+
+    .hero-title span.highlight {
+      background: linear-gradient(135deg, var(--neon-blue), var(--neon-pink), var(--neon-green), var(--neon-purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      background-size: 200% 200%;
+      animation: gradientShift 4s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      max-width: 700px;
+      margin: 0 auto 40px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 24px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .stat-item strong {
+      display: block;
+      font-size: 32px;
+      color: var(--neon-green);
+      font-weight: 700;
+    }
+
+    /* ---------- BUTTONS GRID ---------- */
+    .buttons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+      margin: 60px 0 80px;
+    }
+
+    .btn-card {
+      position: relative;
+      border-radius: var(--radius-xl);
+      padding: 32px 24px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(25px);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .btn-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: conic-gradient(from 0deg, var(--neon-blue), var(--neon-pink), var(--neon-green), var(--neon-purple));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      padding: 2px;
+      border-radius: inherit;
+    }
+
+    .btn-card:hover::before {
+      opacity: 1;
+    }
+
+    .btn-card:hover {
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 30px 60px rgba(0, 224, 255, 0.4), 0 0 80px rgba(255, 0, 153, 0.5);
+      border-color: rgba(255, 0, 153, 0.8);
+    }
+
+    .btn-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 999px;
+      background: conic-gradient(from 0deg, var(--neon-blue), var(--neon-pink), var(--neon-green));
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #050509;
+      font-size: 24px;
+      font-weight: 700;
+      box-shadow: var(--shadow-neon);
+    }
+
+    .btn-card h3 {
+      font-size: 20px;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .btn-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .btn-arrow {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 20% 20%, var(--neon-blue), var(--neon-pink));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #050509;
+      box-shadow: 0 0 25px rgba(255, 0, 153, 0.8);
+      transition: all 0.3s ease;
+    }
+
+    .btn-card:hover .btn-arrow {
+      transform: scale(1.15) rotate(360deg);
+    }
+
+    /* ---------- INFO SECTIONS ---------- */
+    .info-section {
+      margin-bottom: 80px;
+      padding: 40px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(145deg, rgba(11, 11, 24, 0.95), rgba(5, 5, 9, 0.9));
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(20px);
+    }
+
+    .info-title {
+      font-size: 28px;
+      margin-bottom: 24px;
+      text-align: center;
+      letter-spacing: -0.03em;
+    }
+
+    .info-title span {
+      background: linear-gradient(135deg, var(--neon-green), var(--neon-orange));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 28px;
+      margin-top: 32px;
+    }
+
+    .info-item {
+      text-align: center;
+      padding: 24px 20px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .info-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 224, 255, 0.2);
+    }
+
+    .info-number {
+      font-size: 44px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--neon-blue), var(--neon-pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .info-label {
+      font-size: 15px;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      font-weight: 500;
+    }
+
+    /* ---------- FEATURES GRID ---------- */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
+      margin-top: 40px;
+    }
+
+    .feature-item {
+      padding: 28px 24px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .feature-item::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .feature-item:hover::before {
+      left: 100%;
+    }
+
+    .feature-item:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0, 224, 255, 0.3);
+      border-color: rgba(0, 224, 255, 0.5);
+    }
+
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 0 25px rgba(0, 224, 255, 0.7);
+      transition: all 0.3s ease;
+    }
+
+    .feature-item:hover .feature-icon {
+      transform: scale(1.1) rotate(360deg);
+      box-shadow: 0 0 35px rgba(0, 224, 255, 1);
+    }
+
+    .feature-title {
+      font-size: 18px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .feature-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ---------- TIMELINE SECTION ---------- */
+    .timeline-section {
+      margin: 80px 0;
+    }
+
+    .timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 0;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--neon-blue), var(--neon-pink), var(--neon-green));
+      transform: translateX(-50%);
+      box-shadow: 0 0 20px rgba(0, 224, 255, 0.5);
+    }
+
+    .timeline-item {
+      position: relative;
+      width: 48%;
+      margin-bottom: 40px;
+      padding: 24px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(20px);
+    }
+
+    .timeline-item:nth-child(odd) {
+      margin-left: 52%;
+    }
+
+    .timeline-item:nth-child(even) {
+      margin-left: 0;
+      margin-right: 52%;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: 50%;
+      top: 24px;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--neon-blue);
+      border: 3px solid #050509;
+      box-shadow: 0 0 25px rgba(0, 224, 255, 0.9);
+      z-index: 2;
+    }
+
+    .timeline-number {
+      position: absolute;
+      left: 50%;
+      top: 8px;
+      transform: translateX(-50%);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--neon-green);
+    }
+
+    .timeline-title {
+      font-size: 18px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    /* ---------- CTA SECTION ---------- */
+    .cta-section {
+      text-align: center;
+      padding: 60px 40px;
+      background: linear-gradient(135deg, rgba(28, 22, 54, 0.95), rgba(5, 5, 9, 0.9));
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      margin: 60px 0;
+    }
+
+    .cta-title {
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+
+    .cta-subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+
+    /* ---------- DEVELOPERS SECTION ---------- */
+    .developers-section {
+      text-align: center;
+      padding: 60px 40px;
+      background: radial-gradient(ellipse at top, #1c1636 0%, #050509 70%);
+      border-top: 2px solid rgba(255, 255, 255, 0.3);
+      margin-top: 80px;
+    }
+
+    .devs-title {
+      font-size: 24px;
+      margin-bottom: 40px;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+    }
+
+    .devs-grid {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 60px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .dev-card {
+      text-align: center;
+      padding: 32px 24px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(20px);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dev-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: conic-gradient(var(--neon-blue), var(--neon-pink));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .dev-card:hover::before {
+      opacity: 0.1;
+    }
+
+    .dev-card:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 30px 60px rgba(0, 224, 255, 0.4);
+    }
+
+    .dev-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin: 0 auto 24px;
+      position: relative;
+      box-shadow: 0 0 40px rgba(0, 224, 255, 0.8);
+    }
+
+    .dev-avatar-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #050509, #15152a);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--neon-blue);
+      line-height: 1;
+      text-shadow: 0 0 10px rgba(0, 224, 255, 0.8);
+      border: 3px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .dev-name {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--neon-blue), var(--neon-pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .dev-role {
+      font-size: 15px;
+      color: var(--neon-green);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .dev-tech {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 12px;
+      font-weight: 500;
+    }
+
+    /* ---------- SCROLL ANIMATIONS ---------- */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .reveal {
+      opacity: 0;
+      animation: fadeUp 1s ease-out both;
+      animation-timeline: view();
+      animation-range: entry 15% cover 50%;
+    }
+
+    .reveal-scale {
+      opacity: 0;
+      animation: fadeInScale 1.1s ease-out both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 40%;
+    }
+
+    .reveal-delay-1 { animation-delay: 0.15s; }
+    .reveal-delay-2 { animation-delay: 0.3s; }
+    .reveal-delay-3 { animation-delay: 0.45s; }
+    .reveal-delay-4 { animation-delay: 0.6s; }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 1024px) {
+      .timeline::before { left: 30px; }
+      .timeline-item { width: 100%; margin-left: 70px !important; margin-right: 0 !important; }
+      .timeline-item:nth-child(odd) { margin-left: 70px !important; }
+    }
+
+    @media (max-width: 768px) {
+      .buttons-grid { grid-template-columns: 1fr; }
+      .devs-grid { flex-direction: column; gap: 40px; }
+      .info-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: 1fr; }
+      .hero-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 30px 16px 80px; }
+      .info-section { padding: 24px 20px; }
+      .info-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Enhanced Animated Background -->
+  <div class="bg-orbit">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <div class="container">
+    <!-- HERO SECTION -->
+    <section class="hero reveal-scale">
+      <div class="badge">
+        <div class="badge-dot">
+          <div class="badge-dot-inner"></div>
+        </div>
+        <span>🚀 Built for Placements 2026 | 10K+ Students</span>
+      </div>
+      
+      <h1 class="hero-title">
+        Welcome to <span class="highlight">StudentHub</span>
+      </h1>
+      
+      <p class="hero-subtitle">
+        The ultimate platform for college students & freshers. Find 2000+ curated PDFs, 100+ complete roadmaps, company-specific interview questions, 
+        college notes, and placement preparation materials. From DSA to HR rounds - everything you need in one place.
+      </p>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <strong>2000+</strong>
+          Interview Questions
+        </div>
+        <div class="stat-item">
+          <strong>120+</strong>
+          Roadmaps & Guides
+        </div>
+        <div class="stat-item">
+          <strong>75+</strong>
+          College Subjects
+        </div>
+        <div class="stat-item">
+          <strong>50K+</strong>
+          Downloads
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN ACTION BUTTONS -->
+    <div class="buttons-grid">
+      <a href="index.html" class="btn-card reveal">
+        <div class="btn-icon">🗺️</div>
+        <h3>Complete Roadmaps</h3>
+        <p>Full-Stack • Backend • Frontend • DSA • ML • Android • iOS • DevOps • Data Science • 25+ roles with timelines, projects & resources</p>
+        <div class="btn-arrow">→</div>
+      </a>
+
+      <a href="index.html" class="btn-card reveal reveal-delay-1">
+        <div class="btn-icon">💻</div>
+        <h3>Technical Interviews</h3>
+        <p>1500+ questions across DSA, System Design, OOPs, DBMS, OS, CN. Company-tagged (Google, Amazon, Microsoft) with difficulty levels</p>
+        <div class="btn-arrow">→</div>
+      </a>
+
+      <a href="index.html" class="btn-card reveal reveal-delay-2">
+        <div class="btn-icon">📚</div>
+        <h3>College Notes</h3>
+        <p>DBMS • OS • CN • OOPs • TOC • Algorithms • Discrete Math • Compiler Design • 50+ semester subjects with diagrams & examples</p>
+        <div class="btn-arrow">→</div>
+      </a>
+
+      <a href="index.html" class="btn-card reveal reveal-delay-3">
+        <div class="btn-icon">⚡</div>
+        <h3>DSA Practice Sheets</h3>
+        <p>450+ pattern-based questions • Arrays • Strings • Trees • Graphs • DP • Greedy • Sliding Window with solutions & complexities</p>
+        <div class="btn-arrow">→</div>
+      </a>
+
+      <a href="index.html" class="btn-card reveal">
+        <div class="btn-icon">🎤</div>
+        <h3>HR & Behavioral</h3>
+        <p>200+ HR questions • Behavioral scenarios • Project explanation templates • Salary negotiation • Company-specific answers</p>
+        <div class="btn-arrow">→</div>
+      </a>
+
+      <a href="index.html" class="btn-card reveal reveal-delay-1">
+        <div class="btn-icon">🔧</div>
+        <h3>Tech Stack Guides</h3>
+        <p>Java • Python • React • Node.js • Spring Boot • MongoDB • Docker • Kubernetes • Cloud setup guides & cheat sheets</p>
+        <div class="btn-arrow">→</div>
+      </a>
+    </div>
+
+    <!-- ADVANTAGES SECTION -->
+    <section class="info-section reveal-scale">
+      <h2 class="info-title">Why <span>10K+ Students</span> Trust StudentHub</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-number">✅</span>
+          <span class="info-label">Clean PDFs</span>
+        </div>
+        <div class="info-item">
+          <span class="info-number">⚡</span>
+          <span class="info-label">Instant Access</span>
+        </div>
+        <div class="info-item">
+          <span class="info-number">🏷️</span>
+          <span class="info-label">Company Tagged</span>
+        </div>
+        <div class="info-item">
+          <span class="info-number">📱</span>
+          <span class="info-label">Mobile Perfect</span>
+        </div>
+        <div class="info-item">
+          <span class="info-number">🔄</span>
+          <span class="info-label">Daily Updates</span>
+        </div>
+        <div class="info-item">
+          <span class="info-number">⭐</span>
+          <span class="info-label">Student Curated</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section class="info-section reveal">
+      <h2 class="info-title">Powerful Features for Serious Prep</h2>
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="feature-icon">🎯</div>
+          <h3 class="feature-title">Smart Filtering</h3>
+          <p class="feature-desc">Filter by difficulty, company, topic, role. Find exactly what you need in 3 seconds</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📊</div>
+          <h3 class="feature-title">Progress Tracking</h3>
+          <p class="feature-desc">Mark completed PDFs & roadmaps. See your placement readiness score in real-time</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🔗</div>
+          <h3 class="feature-title">Interlinked Content</h3>
+          <p class="feature-desc">Roadmap → Topic PDFs → Practice questions → Interview sets. Complete flow in one place</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">⏱️</div>
+          <h3 class="feature-title">Timed Revision</h3>
+          <p class="feature-desc">One-page cheat sheets for last-minute revision. Perfect for night-before reading</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">💾</div>
+          <h3 class="feature-title">Offline Ready</h3>
+          <p class="feature-desc">Download PDFs for offline study. Perfect for travel, hostel powercuts, or metro commutes</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">👥</div>
+          <h3 class="feature-title">Community Voted</h3>
+          <p class="feature-desc">Top resources voted by students who cleared Amazon, Google, Microsoft interviews</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- STUDY TIMELINE -->
+    <section class="timeline-section reveal-scale">
+      <div class="info-section">
+        <h2 class="info-title" style="text-align: center; margin-bottom: 40px;">Your 30-Day Placement Journey</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <span class="timeline-number">01</span>
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">Week 1: Foundation</div>
+            <p>Pick roadmap → Study core concepts → Build 1-2 small projects → Understand company requirements</p>
+          </div>
+          
+          <div class="timeline-item">
+            <span class="timeline-number">02</span>
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">Week 2-3: Practice</div>
+            <p>Solve 200+ DSA questions → Topic-wise interview sets → Mock technical interviews → Resume projects</p>
+          </div>
+          
+          <div class="timeline-item">
+            <span class="timeline-number">03</span>
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">Week 4: Polish</div>
+            <p>HR preparation → Behavioral practice → Company-specific questions → Final mock rounds → Confidence boost</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="cta-section reveal-delay-4">
+      <h2 class="cta-title">Ready to Ace Your Placements?</h2>
+      <p class="cta-subtitle">
+        Join 10K+ students who found their dream jobs using these exact resources. 
+        From IITs to Tier-3 colleges - works for everyone.
+      </p>
+      <div style="font-size: 14px; color: var(--text-muted); margin-top: 20px;">
+        Trusted by students at Google, Amazon, Microsoft, Goldman Sachs, Flipkart, and 100+ more
+      </div>
+    </section>
+  </div>
+
+  <!-- DEVELOPERS SECTION -->
+  <section class="developers-section reveal-scale">
+    <h2 class="devs-title">Crafted with Passion for Student Success</h2>
+    
+    <div class="devs-grid">
+      <div class="dev-card">
+        <div class="dev-avatar">
+          <div class="dev-avatar-inner">
+            N<br>
+            <span style="font-size: 14px; font-weight: 600;">ANI</span>
+          </div>
+        </div>
+        <div class="dev-name">Nani</div>
+        <div class="dev-role">Full-Stack Developer & UI/UX</div>
+        <div class="dev-tech">React • Django • Node • MySQL • Docker</div>
+      </div>
+      
+      <div class="dev-card">
+        <div class="dev-avatar">
+          <div class="dev-avatar-inner">
+            D<br>
+            <span style="font-size: 14px; font-weight: 600;">EV</span>
+          </div>
+        </div>
+        <div class="dev-name">Sharu</div>
+        <div class="dev-role"> Backend developer</div>
+        <div class="dev-tech">Tailwind • Framer Motion • Figma • GSAP</div>
+      </div>
+    </div>
+    
+    <p style="margin-top: 32px; color: var(--text-muted); font-size: 14px;">
+      Made with ❤️ in India for students everywhere | Updated January 2026
+    </p>
+  </section>
+
+  <script>
+    // Smooth navigation to index.html (already handled by href)
+    document.querySelectorAll('.btn-card').forEach((card, index) => {
+      card.style.animationDelay = `${index * 0.1}s`;
+      
+      card.addEventListener('mouseenter', () => {
+        card.style.transform = 'translateY(-12px) scale(1.03)';
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'translateY(0) scale(1)';
+      });
+    });
+
+    // Parallax effect for background
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const parallax = document.querySelector('.bg-orbit');
+      parallax.style.transform = `translateY(${scrolled * 0.3}px)`;
+    });
+  </script>
+</body>
+</html>
