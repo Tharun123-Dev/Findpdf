@@ -1,9 +1,11 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import PDF,Roadmap,InterviewQuestion
+from .models import PDF, Roadmap, InterviewQuestion
 from .supabase_client import supabase
 import uuid
 
+
+# ================= PDF =================
 @api_view(["POST", "GET"])
 def pdfs(request):
     if request.method == "POST":
@@ -12,13 +14,13 @@ def pdfs(request):
             pdf_file = request.FILES.get("file")
             image = request.FILES.get("image")
 
-            if not pdf_file or not image:
-                return Response({"error": "Files missing"}, status=400)
+            if not title or not pdf_file or not image:
+                return Response({"error": "All fields required"}, status=400)
 
             pdf_name = f"{uuid.uuid4()}-{pdf_file.name}"
             img_name = f"{uuid.uuid4()}-{image.name}"
 
-            # ✅ Upload PDF
+            # Upload PDF
             supabase.storage.from_("pdfs").upload(
                 path=pdf_name,
                 file=pdf_file.read(),
@@ -28,7 +30,7 @@ def pdfs(request):
                 }
             )
 
-            # ✅ Upload Image
+            # Upload Image
             supabase.storage.from_("images").upload(
                 path=img_name,
                 file=image.read(),
@@ -41,54 +43,80 @@ def pdfs(request):
             pdf_url = supabase.storage.from_("pdfs").get_public_url(pdf_name)
             img_url = supabase.storage.from_("images").get_public_url(img_name)
 
+            # ⛔ PENDING BY DEFAULT
             PDF.objects.create(
                 title=title,
                 file_url=pdf_url,
-                image_url=img_url
+                image_url=img_url,
+                is_approved=False
             )
 
-            return Response({"message": "PDF uploaded successfully"})
+            return Response({
+                "message": "PDF uploaded successfully. Waiting for admin approval."
+            })
 
         except Exception as e:
-            print("UPLOAD ERROR:", e)
+            print("PDF UPLOAD ERROR:", e)
             return Response({"error": str(e)}, status=500)
 
-    data = PDF.objects.all().values()
+    # ✅ ONLY APPROVED PDFs
+    data = PDF.objects.filter(is_approved=True).order_by("-created_at").values()
     return Response(data)
 
 
-# roadmap
+# ================= ROADMAP =================
 @api_view(["POST", "GET"])
 def roadmaps(request):
     if request.method == "POST":
-        title = request.POST["title"]
-        desc = request.POST["description"]
-        image = request.FILES["image"]
+        try:
+            title = request.POST.get("title")
+            desc = request.POST.get("description")
+            image = request.FILES.get("image")
 
-        img_name = f"{uuid.uuid4()}-{image.name}"
-        supabase.storage.from_("images").upload(img_name, image.read())
-        img_url = supabase.storage.from_("images").get_public_url(img_name)
+            if not title or not desc or not image:
+                return Response({"error": "All fields required"}, status=400)
 
-        Roadmap.objects.create(
-            title=title,
-            description=desc,
-            image_url=img_url
-        )
+            img_name = f"{uuid.uuid4()}-{image.name}"
+            supabase.storage.from_("images").upload(
+                img_name,
+                image.read(),
+                file_options={
+                    "content-type": image.content_type,
+                    "upsert": False
+                }
+            )
 
-        return Response({"message": "Roadmap uploaded"})
+            img_url = supabase.storage.from_("images").get_public_url(img_name)
 
-    data = Roadmap.objects.all().values()
+            # ⛔ PENDING BY DEFAULT
+            Roadmap.objects.create(
+                title=title,
+                description=desc,
+                image_url=img_url,
+                is_approved=False
+            )
+
+            return Response({
+                "message": "Roadmap uploaded. Waiting for admin approval."
+            })
+
+        except Exception as e:
+            print("ROADMAP UPLOAD ERROR:", e)
+            return Response({"error": str(e)}, status=500)
+
+    # ✅ ONLY APPROVED ROADMAPS
+    data = Roadmap.objects.filter(is_approved=True).order_by("-created_at").values()
     return Response(data)
 
-# interview questions
+
+# ================= INTERVIEW QUESTIONS =================
 @api_view(["POST", "GET"])
 def interview_questions(request):
-
     if request.method == "POST":
         try:
             company = request.POST.get("company")
             role = request.POST.get("role")
-            pdf = request.FILES.get("file")  # ✅ FIXED
+            pdf = request.FILES.get("file")
 
             if not company or not role or not pdf:
                 return Response({"error": "All fields required"}, status=400)
@@ -106,17 +134,25 @@ def interview_questions(request):
 
             pdf_url = supabase.storage.from_("interview_pdfs").get_public_url(pdf_name)
 
+            # ⛔ PENDING BY DEFAULT
             InterviewQuestion.objects.create(
                 company=company,
                 role=role,
-                pdf_url=pdf_url
+                pdf_url=pdf_url,
+                is_approved=False
             )
 
-            return Response({"message": "Interview PDF uploaded successfully"})
+            return Response({
+                "message": "Interview PDF uploaded. Waiting for admin approval."
+            })
 
         except Exception as e:
             print("INTERVIEW UPLOAD ERROR:", e)
             return Response({"error": str(e)}, status=500)
 
-    data = InterviewQuestion.objects.all().order_by("company", "role").values()
+    # ✅ ONLY APPROVED INTERVIEW QUESTIONS
+    data = InterviewQuestion.objects.filter(
+        is_approved=True
+    ).order_by("company", "role").values()
+
     return Response(data)

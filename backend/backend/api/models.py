@@ -1,6 +1,3 @@
-
-
-# Create your models here.
 from django.db import models
 
 class PDF(models.Model):
@@ -9,11 +6,24 @@ class PDF(models.Model):
     image_url = models.URLField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # ✅ NEW: admin approval
+    is_approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
+
+
 class Roadmap(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     image_url = models.URLField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    # ✅ NEW: admin approval
+    is_approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
 
 
 class InterviewQuestion(models.Model):
@@ -21,6 +31,9 @@ class InterviewQuestion(models.Model):
     role = models.CharField(max_length=100)
     pdf_url = models.URLField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    # ✅ NEW: admin approval
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.company} - {self.role}"

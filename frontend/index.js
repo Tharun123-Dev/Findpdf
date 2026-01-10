@@ -1,5 +1,5 @@
 // ================= CONFIG =================
-const BACKEND = "https://findpdf-c6cp.onrender.com";
+const BACKEND =  "https://findpdf-c6cp.onrender.com";
 const API = BACKEND + "/api/";
 
 // ================= HELPERS =================
@@ -37,17 +37,19 @@ document.getElementById("pdfForm")?.addEventListener("submit", async e => {
             body: formData
         });
 
+        const data = await res.json();
+
         if (res.ok) {
             e.target.reset();
-            loadPDFs();
-            alert("PDF uploaded successfully!");
+            alert("✅ PDF uploaded successfully.\n⏳ Waiting for admin approval.");
         } else {
-            alert("PDF upload failed");
+            alert(data.error || "PDF upload failed");
         }
     } catch (err) {
         alert("Upload error: " + err.message);
     }
 });
+
 
 // Load PDFs
 async function loadPDFs() {
@@ -117,12 +119,13 @@ document.getElementById("roadmapForm")?.addEventListener("submit", async e => {
             body: formData
         });
 
+        const data = await res.json();
+
         if (res.ok) {
             e.target.reset();
-            loadRoadmaps();
-            alert("Roadmap uploaded successfully!");
+            alert("✅ Roadmap uploaded.\n⏳ Waiting for admin approval.");
         } else {
-            alert("Roadmap upload failed");
+            alert(data.error || "Roadmap upload failed");
         }
     } catch (err) {
         alert("Upload error: " + err.message);
@@ -205,7 +208,7 @@ document.getElementById("interviewForm")?.addEventListener("submit", async (e) =
 
         e.target.reset();
         loadInterviews();
-        alert("Interview PDF uploaded successfully!");
+        alert("Interview PDF uploaded successfully! and wait for admin approval");
     } catch (err) {
         console.error(err);
         alert("Network error");
