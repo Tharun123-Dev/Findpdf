@@ -110,15 +110,48 @@
             <input
   type="text"
   id="roadmapSearch"
+  class="search-box"
   placeholder="🔍 Search Roadmap..."
   onkeyup="filterRoadmaps()"
 />
+
 
 
         </form>
 
         <div id="roadmapList" class="list-grid"></div>
     </div>
+</section>
+
+<!-- interview Section -->
+<section id="interview">
+  <div class="box">
+    <div class="section-title">
+      <h2>🎯 Interview Questions</h2>
+      <p>Company-wise & role-based interview question PDFs</p>
+    </div>
+
+    <form id="interviewForm">
+      <input type="text" name="company" placeholder="Company Name" required>
+      <input type="text" name="role" placeholder="Role (Frontend, Backend...)" required>
+      <input type="file" name="file" required>
+      <button type="submit">Upload Interview PDF</button>
+    </form>
+
+   <input
+  type="text"
+  id="interviewSearch"
+  class="search-box"
+  placeholder="🔍 Search by company or role..."
+  onkeyup="filterInterviews()"
+/>
+
+
+
+
+
+    <div id="interviewList" class="list-grid"></div>
+  </div>
 </section>
 
 

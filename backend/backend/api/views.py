@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import PDF,Roadmap
+from .models import PDF,Roadmap,InterviewQuestion
 from .supabase_client import supabase
 import uuid
 
@@ -78,4 +78,45 @@ def roadmaps(request):
         return Response({"message": "Roadmap uploaded"})
 
     data = Roadmap.objects.all().values()
+    return Response(data)
+
+# interview questions
+@api_view(["POST", "GET"])
+def interview_questions(request):
+
+    if request.method == "POST":
+        try:
+            company = request.POST.get("company")
+            role = request.POST.get("role")
+            pdf = request.FILES.get("file")  # ✅ FIXED
+
+            if not company or not role or not pdf:
+                return Response({"error": "All fields required"}, status=400)
+
+            pdf_name = f"{uuid.uuid4()}-{pdf.name}"
+
+            supabase.storage.from_("interview_pdfs").upload(
+                path=pdf_name,
+                file=pdf.read(),
+                file_options={
+                    "content-type": pdf.content_type,
+                    "upsert": False
+                }
+            )
+
+            pdf_url = supabase.storage.from_("interview_pdfs").get_public_url(pdf_name)
+
+            InterviewQuestion.objects.create(
+                company=company,
+                role=role,
+                pdf_url=pdf_url
+            )
+
+            return Response({"message": "Interview PDF uploaded successfully"})
+
+        except Exception as e:
+            print("INTERVIEW UPLOAD ERROR:", e)
+            return Response({"error": str(e)}, status=500)
+
+    data = InterviewQuestion.objects.all().order_by("company", "role").values()
     return Response(data)

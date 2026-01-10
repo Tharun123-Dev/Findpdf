@@ -14,3 +14,13 @@ class Roadmap(models.Model):
     description = models.TextField()
     image_url = models.URLField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class InterviewQuestion(models.Model):
+    company = models.CharField(max_length=100)
+    role = models.CharField(max_length=100)
+    pdf_url = models.URLField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.company} - {self.role}"

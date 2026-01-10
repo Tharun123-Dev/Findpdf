@@ -181,6 +181,59 @@ function filterRoadmaps() {
     renderRoadmaps(filtered);
 }
 
+// ================= INTERVIEW =================
+let allInterviews = [];
+const INTERVIEW_LIMIT = 12;
+
+document.getElementById("interviewForm")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+
+    try {
+        const res = await fetch(API + "interviews/", {
+            method: "POST",
+            body: formData
+        });
+
+        if (!res.ok) {
+            const err = await res.json();
+            console.error("Upload error:", err);
+            alert("Interview upload failed");
+            return;
+        }
+
+        e.target.reset();
+        loadInterviews();
+        alert("Interview PDF uploaded successfully!");
+    } catch (err) {
+        console.error(err);
+        alert("Network error");
+    }
+});
+
+async function loadInterviews() {
+    const res = await fetch(API + "interviews/");
+    if (!res.ok) return;
+
+    allInterviews = await res.json();
+
+    renderInterviews(allInterviews.slice(0, INTERVIEW_LIMIT));
+}
+
+function renderInterviews(list) {
+    document.getElementById("interviewList").innerHTML = list.map(i => `
+        <div class="item">
+            <h3>${i.company}</h3>
+            <p>${i.role}</p>
+            <a href="${i.pdf_url}" target="_blank">📖 Open PDF</a>
+        </div>
+    `).join("");
+}
+
+
+
+
 // ================= BACK TO TOP =================
 const backTop = document.getElementById("backTop");
 window.addEventListener("scroll", () => {
@@ -203,4 +256,5 @@ function logout() {
 window.addEventListener("load", () => {
     loadPDFs();
     loadRoadmaps();
+    loadInterviews();
 });
