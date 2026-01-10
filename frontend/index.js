@@ -227,6 +227,10 @@ function renderInterviews(list) {
             <h3>${i.company}</h3>
             <p>${i.role}</p>
             <a href="${i.pdf_url}" target="_blank">📖 Open PDF</a>
+            <a href="${i.pdf_url}" download
+                   class="download-link">
+                    📥 Download PDF
+                </a>
         </div>
     `).join("");
 }
