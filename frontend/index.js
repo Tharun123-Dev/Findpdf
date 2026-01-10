@@ -1,5 +1,5 @@
 // ================= CONFIG =================
-const BACKEND =  "https://findpdf-c6cp.onrender.com";
+const BACKEND =  "https://findpdf-6.onrender.com/";
 const API = BACKEND + "/api/";
 
 // ================= HELPERS =================
