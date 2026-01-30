@@ -902,3 +902,13 @@ input[type="file"]::file-selector-button:active {
 .brm-modal-close:hover {
   opacity: 1;
 }
+
+
+/* download count */
+
+.download-count {
+    margin: 6px 0;
+    font-size: 14px;
+    color: #9ae6b4;   /* soft green */
+    font-weight: 500;
+}

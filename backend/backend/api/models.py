@@ -1,13 +1,17 @@
 from django.db import models
 
+
 class PDF(models.Model):
     title = models.CharField(max_length=200)
     file_url = models.URLField()
     image_url = models.URLField()
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # ✅ NEW: admin approval
+    # admin approval
     is_approved = models.BooleanField(default=False)
+
+    # download count
+    download_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -19,8 +23,11 @@ class Roadmap(models.Model):
     image_url = models.URLField()
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # ✅ NEW: admin approval
+    # admin approval
     is_approved = models.BooleanField(default=False)
+
+    # download count
+    download_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -32,8 +39,11 @@ class InterviewQuestion(models.Model):
     pdf_url = models.URLField()
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # ✅ NEW: admin approval
+    # admin approval
     is_approved = models.BooleanField(default=False)
+
+    # download count
+    download_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"{self.company} - {self.role}"

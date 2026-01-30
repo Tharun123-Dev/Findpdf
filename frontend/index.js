@@ -1,5 +1,5 @@
 // ================= CONFIG =================
-const BACKEND =  "https://findpdf-6.onrender.com/";
+const BACKEND =  "http://127.0.0.1:8000/";
 const API = BACKEND + "/api/";
 
 // ================= HELPERS =================
@@ -79,14 +79,22 @@ function renderPDFs(list) {
             <img src="${p.image_url}"
                  onclick="openInNewTab('${p.image_url}')">
 
-            <a href="${p.file_url}" target="_blank">📖 Open PDF</a>
+            <!-- ✅ DOWNLOAD COUNT -->
+            <p class="download-count">
+                ⬇ ${p.download_count} downloads
+            </p>
 
-            <a onclick="forceDownload('${p.file_url}', '${p.title}.pdf')">
+            <a href="${p.file_url}" target="_blank">
+                📖 Open PDF
+            </a>
+
+            <a onclick="downloadPDF(${p.id}, '${p.title}')">
                 📥 Download PDF
             </a>
         </div>
     `).join("");
 }
+
 
 // Search PDFs
 function filterPDFs() {
@@ -103,6 +111,18 @@ function filterPDFs() {
 
     renderPDFs(filtered);
 }
+
+//PDF download with count 
+async function downloadPDF(id, title) {
+    const res = await fetch(API + `pdfs/${id}/download/`, { method: "POST" });
+    if (!res.ok) return alert("Download failed");
+
+    const data = await res.json();
+    forceDownload(data.url, `${title}.pdf`);
+
+    loadPDFs(); // refresh count
+}
+
 
 // ================= ROADMAP SECTION =================
 let allRoadmaps = [];
@@ -161,7 +181,9 @@ function renderRoadmaps(list) {
             <img src="${r.image_url}"
                  onclick="openInNewTab('${r.image_url}')">
 
-            <a onclick="forceDownload('${r.image_url}', '${r.title}.png')">
+            <p class="count">⬇ ${r.download_count} downloads</p>
+
+            <a onclick="downloadRoadmap(${r.id}, '${r.title}')">
                 📥 Download Roadmap
             </a>
         </div>
@@ -183,6 +205,19 @@ function filterRoadmaps() {
 
     renderRoadmaps(filtered);
 }
+
+// Roadmap download with count
+
+async function downloadRoadmap(id, title) {
+    const res = await fetch(API + `roadmaps/${id}/download/`, { method: "POST" });
+    if (!res.ok) return alert("Download failed");
+
+    const data = await res.json();
+    forceDownload(data.url, `${title}.png`);
+
+    loadRoadmaps(); // refresh count
+}
+
 
 // ================= INTERVIEW =================
 let allInterviews = [];
@@ -229,14 +264,29 @@ function renderInterviews(list) {
         <div class="item">
             <h3>${i.company}</h3>
             <p>${i.role}</p>
-            <a href="${i.pdf_url}" target="_blank">📖 Open PDF</a>
-            <a href="${i.pdf_url}" download
-                   class="download-link">
-                    📥 Download PDF
-                </a>
+
+            <p class="count">⬇ ${i.download_count} downloads</p>
+
+            <a onclick="downloadInterview(${i.id}, '${i.company}', '${i.role}')">
+                📥 Download PDF
+            </a>
         </div>
     `).join("");
 }
+
+
+// Interview PDF download with count
+
+async function downloadInterview(id, company, role) {
+    const res = await fetch(API + `interviews/${id}/download/`, { method: "POST" });
+    if (!res.ok) return alert("Download failed");
+
+    const data = await res.json();
+    forceDownload(data.url, `${company}-${role}.pdf`);
+
+    loadInterviews(); // refresh count
+}
+
 
 
 

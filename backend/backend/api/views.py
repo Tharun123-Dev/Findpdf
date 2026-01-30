@@ -64,6 +64,22 @@ def pdfs(request):
     return Response(data)
 
 
+@api_view(["POST"])
+def pdf_download(request, pk):
+    try:
+        pdf = PDF.objects.get(id=pk, is_approved=True)
+        pdf.download_count += 1
+        pdf.save()
+
+        return Response({
+            "url": pdf.file_url,
+            "download_count": pdf.download_count
+        })
+    except PDF.DoesNotExist:
+        return Response({"error": "PDF not found"}, status=404)
+
+
+
 # ================= ROADMAP =================
 @api_view(["POST", "GET"])
 def roadmaps(request):
@@ -107,6 +123,21 @@ def roadmaps(request):
     # ✅ ONLY APPROVED ROADMAPS
     data = Roadmap.objects.filter(is_approved=True).order_by("-created_at").values()
     return Response(data)
+
+
+@api_view(["POST"])
+def roadmap_download(request, pk):
+    try:
+        roadmap = Roadmap.objects.get(id=pk, is_approved=True)
+        roadmap.download_count += 1
+        roadmap.save()
+
+        return Response({
+            "url": roadmap.image_url,
+            "download_count": roadmap.download_count
+        })
+    except Roadmap.DoesNotExist:
+        return Response({"error": "Roadmap not found"}, status=404)
 
 
 # ================= INTERVIEW QUESTIONS =================
@@ -156,3 +187,18 @@ def interview_questions(request):
     ).order_by("company", "role").values()
 
     return Response(data)
+
+
+@api_view(["POST"])
+def interview_download(request, pk):
+    try:
+        interview = InterviewQuestion.objects.get(id=pk, is_approved=True)
+        interview.download_count += 1
+        interview.save()
+
+        return Response({
+            "url": interview.pdf_url,
+            "download_count": interview.download_count
+        })
+    except InterviewQuestion.DoesNotExist:
+        return Response({"error": "Interview PDF not found"}, status=404)
