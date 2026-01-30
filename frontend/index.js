@@ -1,5 +1,5 @@
 // ================= CONFIG =================
-const BACKEND =  "https://findpdf-2-qivw.onrender.com/";
+const BACKEND =  " http://127.0.0.1:8000/";
 const API = BACKEND + "/api/";
 
 // ================= HELPERS =================
@@ -77,50 +77,21 @@ function renderPDFs(list) {
             <h3>${p.title}</h3>
 
             <img src="${p.image_url}"
-                 onclick="openInNewTab('${p.image_url}')">
+                 onclick="incrementView('${API}pdfs/${p.id}/view/'); window.open('${p.file_url}','_blank')">
 
-            <!-- ✅ DOWNLOAD COUNT -->
-            <p class="download-count">
-                ⬇ ${p.download_count} downloads
-            </p>
-
-            <a href="${p.file_url}" target="_blank">
+            <a href="${p.file_url}" target="_blank"
+               onclick="incrementView('${API}pdfs/${p.id}/view/')">
                 📖 Open PDF
             </a>
 
-            <a onclick="downloadPDF(${p.id}, '${p.title}')">
-                📥 Download PDF
+            <a href="${p.file_url}" download>
+                ⬇️ Download PDF
             </a>
+
+            <p class="views">👁️ ${p.view_count} views</p>
+            <p class="downloads">⬇️ ${p.download_count} downloads</p>
         </div>
     `).join("");
-}
-
-
-// Search PDFs
-function filterPDFs() {
-    const text = document.getElementById("pdfSearch").value.toLowerCase().trim();
-
-    if (text === "") {
-        renderPDFs(allPDFs.slice(0, PDF_LIMIT));
-        return;
-    }
-
-    const filtered = allPDFs.filter(p =>
-        p.title.toLowerCase().includes(text)
-    );
-
-    renderPDFs(filtered);
-}
-
-//PDF download with count 
-async function downloadPDF(id, title) {
-    const res = await fetch(API + `pdfs/${id}/download/`, { method: "POST" });
-    if (!res.ok) return alert("Download failed");
-
-    const data = await res.json();
-    forceDownload(data.url, `${title}.pdf`);
-
-    loadPDFs(); // refresh count
 }
 
 
@@ -179,16 +150,24 @@ function renderRoadmaps(list) {
             <p>${r.description}</p>
 
             <img src="${r.image_url}"
-                 onclick="openInNewTab('${r.image_url}')">
+                 onclick="incrementView('${API}roadmaps/${r.id}/view/'); window.open('${r.image_url}','_blank')">
 
-            <p class="count">⬇ ${r.download_count} downloads</p>
-
-            <a onclick="downloadRoadmap(${r.id}, '${r.title}')">
-                📥 Download Roadmap
+            <a href="${r.image_url}" target="_blank"
+               onclick="incrementView('${API}roadmaps/${r.id}/view/')">
+                🗺️ Open Roadmap
             </a>
+
+            <a href="${r.image_url}" download>
+                ⬇️ Download Roadmap
+            </a>
+
+            <p class="views">👁️ ${r.view_count} views</p>
+            <p class="downloads">⬇️ ${r.download_count} downloads</p>
         </div>
     `).join("");
 }
+
+
 
 // Search Roadmaps
 function filterRoadmaps() {
@@ -265,14 +244,21 @@ function renderInterviews(list) {
             <h3>${i.company}</h3>
             <p>${i.role}</p>
 
-            <p class="count">⬇ ${i.download_count} downloads</p>
-
-            <a onclick="downloadInterview(${i.id}, '${i.company}', '${i.role}')">
-                📥 Download PDF
+            <a href="${i.pdf_url}" target="_blank"
+               onclick="incrementView('${API}interviews/${i.id}/view/')">
+                📖 Open PDF
             </a>
+
+            <a href="${i.pdf_url}" download>
+                ⬇️ Download PDF
+            </a>
+
+            <p class="views">👁️ ${i.view_count} views</p>
+            <p class="downloads">⬇️ ${i.download_count} downloads</p>
         </div>
     `).join("");
 }
+
 
 
 // Interview PDF download with count
@@ -315,3 +301,12 @@ window.addEventListener("load", () => {
     loadRoadmaps();
     loadInterviews();
 });
+
+
+async function incrementView(url) {
+    try {
+        await fetch(url, { method: "POST" });
+    } catch (e) {
+        console.error("View count error", e);
+    }
+}

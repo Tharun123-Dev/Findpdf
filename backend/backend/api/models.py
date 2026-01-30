@@ -13,6 +13,10 @@ class PDF(models.Model):
     # download count
     download_count = models.PositiveIntegerField(default=0)
 
+    # views count
+    view_count = models.PositiveIntegerField(default=0)  
+
+
     def __str__(self):
         return self.title
 
@@ -29,6 +33,10 @@ class Roadmap(models.Model):
     # download count
     download_count = models.PositiveIntegerField(default=0)
 
+    # views count
+    view_count = models.PositiveIntegerField(default=0)   # 👁️ NEW
+
+
     def __str__(self):
         return self.title
 
@@ -44,6 +52,10 @@ class InterviewQuestion(models.Model):
 
     # download count
     download_count = models.PositiveIntegerField(default=0)
+
+    # view count
+    view_count = models.PositiveIntegerField(default=0) 
+
 
     def __str__(self):
         return f"{self.company} - {self.role}"

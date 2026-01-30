@@ -77,6 +77,14 @@ def pdf_download(request, pk):
         })
     except PDF.DoesNotExist:
         return Response({"error": "PDF not found"}, status=404)
+    
+@api_view(["POST"])
+def increment_pdf_view(request, pk):
+    pdf = PDF.objects.get(id=pk, is_approved=True)
+    pdf.view_count += 1
+    pdf.save()
+    return Response({"views": pdf.view_count})
+
 
 
 
@@ -138,6 +146,15 @@ def roadmap_download(request, pk):
         })
     except Roadmap.DoesNotExist:
         return Response({"error": "Roadmap not found"}, status=404)
+    
+
+@api_view(["POST"])
+def increment_roadmap_view(request, pk):
+    roadmap = Roadmap.objects.get(id=pk, is_approved=True)
+    roadmap.view_count += 1
+    roadmap.save()
+    return Response({"views": roadmap.view_count})
+
 
 
 # ================= INTERVIEW QUESTIONS =================
@@ -202,3 +219,11 @@ def interview_download(request, pk):
         })
     except InterviewQuestion.DoesNotExist:
         return Response({"error": "Interview PDF not found"}, status=404)
+
+
+@api_view(["POST"])
+def increment_interview_view(request, pk):
+    interview = InterviewQuestion.objects.get(id=pk, is_approved=True)
+    interview.view_count += 1
+    interview.save()
+    return Response({"views": interview.view_count})
