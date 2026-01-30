@@ -1,5 +1,5 @@
 // ================= CONFIG =================
-const BACKEND =  "http://127.0.0.1:8000/";
+const BACKEND =  "https://findpdf-2-qivw.onrender.com/";
 const API = BACKEND + "/api/";
 
 // ================= HELPERS =================
