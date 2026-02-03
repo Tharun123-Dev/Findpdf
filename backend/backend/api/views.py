@@ -51,22 +51,22 @@ def login(request):
         "is_admin": user.is_staff
     })
 
-    # HttpOnly cookies (secure)
-    response.set_cookie(
-        key="access",
-        value=str(refresh.access_token),
-        httponly=True,
-        secure=True,       # True in production (HTTPS)
-        samesite="Lax"
-    )
+    # # HttpOnly cookies (secure)
+    # response.set_cookie(
+    #     key="access",
+    #     value=str(refresh.access_token),
+    #     httponly=True,
+    #     secure=True,       # True in production (HTTPS)
+    #     samesite="Lax"
+    # )
 
-    response.set_cookie(
-        key="refresh",
-        value=str(refresh),
-        httponly=True,
-        secure=True,
-        samesite="Strict"
-    )
+    # response.set_cookie(
+    #     key="refresh",
+    #     value=str(refresh),
+    #     httponly=True,
+    #     secure=True,
+    #     samesite="Strict"
+    # )
 
     return response
 
