@@ -107,7 +107,7 @@ function checkAdminAuth() {
   const token = localStorage.getItem("access");
   if (!token) {
     alert("Please login as admin");
-    window.location.href = "login.html";
+    window.location.href = "index.html";
   }
 }
 
@@ -116,7 +116,7 @@ async function secureFetch(url, options = {}) {
   const token = localStorage.getItem("access");
 
   if (!token) {
-    window.location.href = "login.html";
+    window.location.href = "index.html";
     return;
   }
 

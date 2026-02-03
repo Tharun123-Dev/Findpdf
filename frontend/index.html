@@ -162,12 +162,21 @@ document.getElementById('loginForm').onsubmit = async function(e) {
         return;
     }
 
+    // Save JWT
     localStorage.setItem("access", data.access);
     localStorage.setItem("refresh", data.refresh);
     localStorage.setItem("username", data.username);
 
-    window.location.href = "main.html";
+    // 🔑 ADMIN REDIRECT
+    if (data.is_admin) {
+        // Open Django admin (backend)
+        window.location.href = "https://findpdf-4-qkei.onrender.com/admin/";
+    } else {
+        // Normal user
+        window.location.href = "main.html";
+    }
 };
+
 
 /* ========= THIS WAS THE MISSING PART ========= */
 function showSignup() {
