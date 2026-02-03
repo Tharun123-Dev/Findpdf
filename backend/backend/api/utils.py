@@ -29,3 +29,5 @@ def validate_pdf(file):
 def validate_image(file):
     if not file.content_type.startswith("image/"):
         raise ValueError("Only image files are allowed")
+    if file.size > MAX_FILE_SIZE:
+        raise ValueError("Image too large (max 10MB)")
