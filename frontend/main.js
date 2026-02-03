@@ -1,6 +1,6 @@
 // ================= CONFIG =================
-// const BACKEND = "http://127.0.0.1:8000";
-const BACKEND = " https://findpdf-4-qkei.onrender.com";
+const BACKEND = "http://127.0.0.1:8000";
+// const BACKEND = " https://findpdf-4-qkei.onrender.com";
 
 const API = BACKEND + "/api/";
 
@@ -96,8 +96,15 @@ async function loadPDFs() {
     if (!res) return;
 
     allPDFs = await res.json();
+
+    // ✅ A → Z sort
+    allPDFs.sort((a, b) =>
+        a.title.localeCompare(b.title, undefined, { sensitivity: "base" })
+    );
+
     renderPDFs(allPDFs.slice(0, PDF_LIMIT));
 }
+
 
 function renderPDFs(list) {
     const el = document.getElementById("pdfList");
@@ -111,6 +118,26 @@ function renderPDFs(list) {
         </div>
     `).join("");
 }
+function filterPDFs() {
+    const text = document.getElementById("pdfSearch").value.toLowerCase().trim();
+
+    let list = allPDFs;
+
+    if (text !== "") {
+        list = allPDFs.filter(p =>
+            p.title.toLowerCase().includes(text)
+        );
+    }
+
+    // ✅ Keep alphabetical order
+    list.sort((a, b) =>
+        a.title.localeCompare(b.title, undefined, { sensitivity: "base" })
+    );
+
+    renderPDFs(list.slice(0, PDF_LIMIT));
+}
+
+
 
 // ================= ROADMAP =================
 let allRoadmaps = [];
@@ -145,8 +172,15 @@ async function loadRoadmaps() {
     if (!res) return;
 
     allRoadmaps = await res.json();
+
+    // ✅ A → Z
+    allRoadmaps.sort((a, b) =>
+        a.title.localeCompare(b.title, undefined, { sensitivity: "base" })
+    );
+
     renderRoadmaps(allRoadmaps.slice(0, ROADMAP_LIMIT));
 }
+
 
 function renderRoadmaps(list) {
     const el = document.getElementById("roadmapList");
@@ -159,6 +193,25 @@ function renderRoadmaps(list) {
         </div>
     `).join("");
 }
+function filterRoadmaps() {
+    const text = document.getElementById("roadmapSearch").value.toLowerCase().trim();
+
+    let list = allRoadmaps;
+
+    if (text !== "") {
+        list = allRoadmaps.filter(r =>
+            r.title.toLowerCase().includes(text)
+        );
+    }
+
+    // ✅ Alphabetical
+    list.sort((a, b) =>
+        a.title.localeCompare(b.title, undefined, { sensitivity: "base" })
+    );
+
+    renderRoadmaps(list.slice(0, ROADMAP_LIMIT));
+}
+
 
 // ================= INTERVIEW =================
 let allInterviews = [];
@@ -193,6 +246,13 @@ async function loadInterviews() {
     if (!res) return;
 
     allInterviews = await res.json();
+
+    // ✅ Sort by company, then role
+    allInterviews.sort((a, b) => {
+        const c = a.company.localeCompare(b.company, undefined, { sensitivity: "base" });
+        return c !== 0 ? c : a.role.localeCompare(b.role, undefined, { sensitivity: "base" });
+    });
+
     renderInterviews(allInterviews.slice(0, INTERVIEW_LIMIT));
 }
 
@@ -207,6 +267,26 @@ function renderInterviews(list) {
             <a href="${i.pdf_url}" target="_blank">Open</a>
         </div>
     `).join("");
+}
+function filterInterviews() {
+    const text = document.getElementById("interviewSearch").value.toLowerCase().trim();
+
+    let list = allInterviews;
+
+    if (text !== "") {
+        list = allInterviews.filter(i =>
+            i.company.toLowerCase().includes(text) ||
+            i.role.toLowerCase().includes(text)
+        );
+    }
+
+    // ✅ Alphabetical (company → role)
+    list.sort((a, b) => {
+        const c = a.company.localeCompare(b.company, undefined, { sensitivity: "base" });
+        return c !== 0 ? c : a.role.localeCompare(b.role, undefined, { sensitivity: "base" });
+    });
+
+    renderInterviews(list.slice(0, INTERVIEW_LIMIT));
 }
 
 // ================= LOGOUT =================
