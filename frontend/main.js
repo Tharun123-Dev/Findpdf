@@ -9,7 +9,7 @@ function checkAuth() {
     const token = localStorage.getItem("access");
     if (!token) {
         alert("Please login first");
-        window.location.href = "login.html";
+        window.location.href = "index.html";
     }
 }
 
@@ -18,7 +18,7 @@ async function secureFetch(url, options = {}) {
     const token = localStorage.getItem("access");
 
     if (!token) {
-        window.location.href = "login.html";
+        window.location.href = "index.html";
         return;
     }
 
@@ -32,7 +32,7 @@ async function secureFetch(url, options = {}) {
     if (res.status === 401) {
         alert("Session expired. Please login again.");
         localStorage.clear();
-        window.location.href = "login.html";
+        window.location.href = "index.html";
         return;
     }
 
@@ -212,7 +212,7 @@ function renderInterviews(list) {
 // ================= LOGOUT =================
 function logout() {
     localStorage.clear();
-    window.location.href = "login.html";
+    window.location.href = "index.html";
 }
 
 // ================= INIT =================
