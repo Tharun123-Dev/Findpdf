@@ -98,21 +98,61 @@
 </div>
 
 <script>
-const API = "https://findpdf-3-z8us.onrender.com/api/";
+const API = "http://127.0.0.1:8000/api/";
 
+// ================= AUTH CHECK =================
+function checkAdminAuth() {
+  const token = localStorage.getItem("access");
+  if (!token) {
+    alert("Please login as admin");
+    window.location.href = "login.html";
+  }
+}
+
+// ================= SECURE FETCH =================
+async function secureFetch(url, options = {}) {
+  const token = localStorage.getItem("access");
+
+  if (!token) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  const headers = {
+    ...(options.headers || {}),
+    "Authorization": "Bearer " + token
+  };
+
+  const res = await fetch(url, { ...options, headers });
+
+  if (res.status === 401 || res.status === 403) {
+    alert("Not authorized as admin");
+    localStorage.clear();
+    window.location.href = "login.html";
+    return;
+  }
+
+  return res;
+}
+
+// ================= LOAD DATA =================
 async function loadAdminData() {
-  const pdfs = await fetch(API+"admin/pdfs/", {credentials:"include"});
-  const roadmaps = await fetch(API+"admin/roadmaps/", {credentials:"include"});
-  const interviews = await fetch(API+"admin/interviews/", {credentials:"include"});
+  const pdfs = await secureFetch(API + "admin/pdfs/");
+  const roadmaps = await secureFetch(API + "admin/roadmaps/");
+  const interviews = await secureFetch(API + "admin/interviews/");
+
+  if (!pdfs || !roadmaps || !interviews) return;
 
   render("pdfs", await pdfs.json(), "pdf");
   render("roadmaps", await roadmaps.json(), "roadmap");
   render("interviews", await interviews.json(), "interview");
 }
 
+// ================= RENDER =================
 function render(div, list, type) {
   const el = document.getElementById(div);
-  if (list.length === 0) {
+
+  if (!list || list.length === 0) {
     el.innerHTML = `<div class="empty">No pending items</div>`;
     return;
   }
@@ -125,15 +165,22 @@ function render(div, list, type) {
   `).join("");
 }
 
+// ================= APPROVE =================
 async function approve(type, id) {
-  await fetch(API+`admin/${type}s/${id}/approve/`, {
-    method:"POST",
-    credentials:"include"
+  const res = await secureFetch(API + `admin/${type}s/${id}/approve/`, {
+    method: "POST"
   });
-  loadAdminData();
+
+  if (res) {
+    loadAdminData();
+  }
 }
 
-loadAdminData();
+// ================= INIT =================
+window.addEventListener("load", () => {
+  checkAdminAuth();
+  loadAdminData();
+});
 </script>
 
 </body>

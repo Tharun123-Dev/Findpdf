@@ -45,30 +45,13 @@ def login(request):
 
     refresh = RefreshToken.for_user(user)
 
-    response = Response({
-        "message": "Login successful",
+    return Response({
+        "access": str(refresh.access_token),
+        "refresh": str(refresh),
         "username": user.username,
         "is_admin": user.is_staff
     })
 
-    # # HttpOnly cookies (secure)
-    # response.set_cookie(
-    #     key="access",
-    #     value=str(refresh.access_token),
-    #     httponly=True,
-    #     secure=True,       # True in production (HTTPS)
-    #     samesite="Lax"
-    # )
-
-    # response.set_cookie(
-    #     key="refresh",
-    #     value=str(refresh),
-    #     httponly=True,
-    #     secure=True,
-    #     samesite="Strict"
-    # )
-
-    return response
 
 
 

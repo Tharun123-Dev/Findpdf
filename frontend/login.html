@@ -332,44 +332,7 @@
     </div>
 
     <script>
-const API = "https://findpdf-3-z8us.onrender.com/api/";
-
-// 3D Tilt (unchanged)
-const card = document.getElementById('loginFormCard');
-card.addEventListener('mousemove', (e) => {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = (y - centerY) / 10;
-    const rotateY = (centerX - x) / 10;
-    card.style.setProperty('--rx', rotateX + 'deg');
-    card.style.setProperty('--ry', rotateY + 'deg');
-    card.classList.add('tilted');
-});
-card.addEventListener('mouseleave', () => {
-    card.style.setProperty('--rx', '0deg');
-    card.style.setProperty('--ry', '0deg');
-    card.classList.remove('tilted');
-});
-
-// Tabs
-function showLogin() {
-    document.getElementById('login-form').classList.add('active');
-    document.getElementById('signup-form').classList.remove('active');
-    document.querySelectorAll('.tab-btn')[0].classList.add('active');
-    document.querySelectorAll('.tab-btn')[1].classList.remove('active');
-    document.getElementById('login-msg').innerHTML = '';
-}
-
-function showSignup() {
-    document.getElementById('login-form').classList.remove('active');
-    document.getElementById('signup-form').classList.add('active');
-    document.querySelectorAll('.tab-btn')[0].classList.remove('active');
-    document.querySelectorAll('.tab-btn')[1].classList.add('active');
-    document.getElementById('signup-msg').innerHTML = '';
-}
+const API = "http://127.0.0.1:8000/api/";
 
 // ---------------- REAL SIGNUP ----------------
 document.getElementById('signupForm').onsubmit = async function(e) {
@@ -400,9 +363,8 @@ document.getElementById('signupForm').onsubmit = async function(e) {
     }
 };
 
-// ---------------- REAL LOGIN ----------------
-
- document.getElementById('loginForm').onsubmit = async function(e) {
+// ---------------- REAL LOGIN (JWT FIXED) ----------------
+document.getElementById('loginForm').onsubmit = async function(e) {
     e.preventDefault();
 
     let user = document.getElementById('login-user').value;
@@ -411,7 +373,6 @@ document.getElementById('signupForm').onsubmit = async function(e) {
     const res = await fetch(API + "login/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",   // IMPORTANT
         body: JSON.stringify({
             username: user,
             password: pass
@@ -425,36 +386,18 @@ document.getElementById('signupForm').onsubmit = async function(e) {
         return;
     }
 
+    // 🔐 SAVE JWT TOKENS
+    localStorage.setItem("access", data.access);
+    localStorage.setItem("refresh", data.refresh);
+    localStorage.setItem("username", data.username);
+
+    // Redirect
     if (data.is_admin) {
         window.location.href = "admin.html";
     } else {
         window.location.href = "index.html";
     }
 };
-
-     
-
-// Success popup
-function showSuccess() {
-    const colors = ['#00ff88', '#11998e', '#ffd700', '#8a2be2'];
-    for (let i = 0; i < 60; i++) {
-        let confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        confetti.style.left = Math.random() * 100 + 'vw';
-        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.animationDelay = Math.random() * 4 + 's';
-        confetti.style.animationDuration = (Math.random() * 4 + 3) + 's';
-        document.body.appendChild(confetti);
-        setTimeout(() => confetti.remove(), 7000);
-    }
-    document.getElementById('success-popup').style.display = 'flex';
-}
-
-function openIndex() {
-    window.location.href = 'index.html';
-}
-
-
 </script>
 
 </body>
