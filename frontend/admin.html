@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>StudentHub Admin</title>
+  <style>
+    * { box-sizing: border-box }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg,#020617,#020617);
+      color: white;
+    }
+
+    header {
+      padding: 20px 40px;
+      font-size: 28px;
+      font-weight: bold;
+      background: #020617;
+      border-bottom: 1px solid #1e293b;
+      color: #38bdf8;
+    }
+
+    .container {
+      padding: 40px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 25px;
+    }
+
+    .section {
+      background: #0f172a;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    }
+
+    .section h2 {
+      margin-top: 0;
+      color: #22d3ee;
+      margin-bottom: 15px;
+    }
+
+    .item {
+      background: #020617;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: 0.3s;
+    }
+
+    .item:hover {
+      transform: scale(1.02);
+      background: #020617;
+    }
+
+    button {
+      background: linear-gradient(135deg,#22c55e,#16a34a);
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.8;
+    }
+
+    .empty {
+      opacity: 0.5;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<header>Admin Dashboard</header>
+
+<div class="container">
+  <div class="section">
+    <h2>📄 Pending PDFs</h2>
+    <div id="pdfs"></div>
+  </div>
+
+  <div class="section">
+    <h2>🗺️ Pending Roadmaps</h2>
+    <div id="roadmaps"></div>
+  </div>
+
+  <div class="section">
+    <h2>🎯 Pending Interviews</h2>
+    <div id="interviews"></div>
+  </div>
+</div>
+
+<script>
+const API = "http://127.0.0.1:8000/api/";
+
+async function loadAdminData() {
+  const pdfs = await fetch(API+"admin/pdfs/", {credentials:"include"});
+  const roadmaps = await fetch(API+"admin/roadmaps/", {credentials:"include"});
+  const interviews = await fetch(API+"admin/interviews/", {credentials:"include"});
+
+  render("pdfs", await pdfs.json(), "pdf");
+  render("roadmaps", await roadmaps.json(), "roadmap");
+  render("interviews", await interviews.json(), "interview");
+}
+
+function render(div, list, type) {
+  const el = document.getElementById(div);
+  if (list.length === 0) {
+    el.innerHTML = `<div class="empty">No pending items</div>`;
+    return;
+  }
+
+  el.innerHTML = list.map(i => `
+    <div class="item">
+      <span>${i.title || i.company}</span>
+      <button onclick="approve('${type}', ${i.id})">Approve</button>
+    </div>
+  `).join("");
+}
+
+async function approve(type, id) {
+  await fetch(API+`admin/${type}s/${id}/approve/`, {
+    method:"POST",
+    credentials:"include"
+  });
+  loadAdminData();
+}
+
+loadAdminData();
+</script>
+
+</body>
+</html>
