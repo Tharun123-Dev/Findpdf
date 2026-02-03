@@ -1,472 +1,404 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Student Resource Hub</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- GOOGLE FONT -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="index.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FindPDF Portal - Emerald Luxe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #0a0a15, #1a0a2e, #2a0a4a, #0a1a30);
+            background-size: 400% 400%;
+            animation: gradientShift 18s ease infinite;
+            overflow: hidden;
+            position: relative;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        /* Luxe Particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #00ff88, transparent),
+                radial-gradient(2px 2px at 40px 70px, #11998e, transparent),
+                radial-gradient(1px 1px at 90px 40px, #ffd700, transparent),
+                radial-gradient(1px 1px at 130px 80px, #8a2be2, transparent);
+            background-repeat: repeat;
+            background-size: 250px 120px;
+            animation: particles 25s linear infinite;
+            opacity: 0.4;
+            z-index: 1;
+        }
+        @keyframes particles {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-120px) rotate(360deg); }
+        }
+        .login-form {
+            position: relative;
+            z-index: 10;
+            width: 450px;
+            padding: 60px 40px;
+            margin: 100px auto;
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(30px);
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 
+                0 30px 60px rgba(0,0,0,0.6),
+                0 0 60px rgba(0,255,136,0.25),
+                inset 0 1px 0 rgba(255,255,255,0.4);
+            text-align: center;
+            transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+            cursor: grab;
+        }
+        .login-form:hover {
+            transform: translateY(-20px) scale(1.03);
+            box-shadow: 
+                0 40px 80px rgba(0,0,0,0.7),
+                0 0 100px rgba(255,215,0,0.4),
+                0 0 40px rgba(138,43,226,0.3);
+        }
+        .login-form.tilted {
+            transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-15px);
+        }
+        .login-form h2 {
+            background: linear-gradient(135deg, #00ff88, #11998e, #ffd700, #8a2be2);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.6em;
+            margin-bottom: 10px;
+            font-weight: 800;
+            animation: textRainbow 4s ease infinite;
+        }
+        @keyframes textRainbow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+        .tab-btn {
+            padding: 15px 30px;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(0,255,136,0.4);
+            border-radius: 50px;
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+        }
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s;
+        }
+        .tab-btn:hover::before { left: 100%; }
+        .tab-btn:hover {
+            transform: scale(1.12) translateY(-6px);
+            box-shadow: 0 25px 50px rgba(255,215,0,0.5);
+            border-color: rgba(255,215,0,0.7);
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #00ff88, #11998e);
+            box-shadow: 0 0 50px rgba(0,255,136,0.7);
+            transform: scale(1.08);
+        }
+        .form-section { display: none; }
+        .form-section.active { 
+            display: block; 
+            animation: fadeInUp 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .input-field {
+            width: 100%;
+            padding: 20px;
+            margin: 18px 0;
+            border: none;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            color: #fff;
+            font-size: 1.15em;
+            border: 2px solid rgba(255,255,255,0.18);
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .input-field::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffd700, #8a2be2);
+            transition: width 0.5s ease;
+        }
+        .input-field:focus {
+            outline: none;
+            background: rgba(255,255,255,0.18);
+            box-shadow: 0 0 40px rgba(0,255,136,0.5);
+            border-color: rgba(0,255,136,0.8);
+        }
+        .input-field:focus::before { width: 100%; }
+        .input-field::placeholder { color: rgba(255,255,255,0.65); }
+        button {
+            width: 100%;
+            padding: 20px;
+            margin-top: 25px;
+            background: linear-gradient(135deg, #00ff88, #11998e, #ffd700);
+            border: none;
+            border-radius: 18px;
+            color: #000;
+            font-size: 1.25em;
+            font-weight: 700;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            transition: left 0.7s;
+        }
+        button:hover::before { left: 100%; }
+        button:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 30px 60px rgba(0,255,136,0.6);
+        }
+        .message {
+            padding: 18px;
+            margin: 20px 0;
+            border-radius: 15px;
+            font-weight: 700;
+            text-align: center;
+            animation: pulseGlow 2.5s infinite;
+            cursor: pointer;
+        }
+        .error { 
+            background: rgba(138,43,226,0.25); 
+            color: #ffd700;
+            box-shadow: 0 0 30px rgba(138,43,226,0.4);
+            border: 1px solid rgba(255,215,0,0.5);
+        }
+        .success { 
+            background: rgba(0,255,136,0.25); 
+            color: #fff;
+            box-shadow: 0 0 30px rgba(0,255,136,0.5);
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(138,43,226,0.3); }
+            50% { box-shadow: 0 0 40px rgba(138,43,226,0.6); }
+        }
+        /* Enhanced Popup */
+        .success-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(40px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(35px);
+            border-radius: 35px;
+            padding: 70px 50px;
+            text-align: center;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            border: 1px solid rgba(0,255,136,0.3);
+            animation: popupMorph 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            max-width: 500px;
+            width: 90%;
+        }
+        @keyframes popupMorph {
+            0% { transform: scale(0.4) rotate(180deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        .popup-content h2 {
+            font-size: 3.2em;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #00ff88, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            animation: confettiFall 4s linear infinite;
+            z-index: 1001;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        /* Forgot Link Style */
+        .forgot-link {
+            background: none;
+            border: none;
+            color: #ffd700;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-decoration: underline;
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.3s;
+        }
+        .forgot-link:hover {
+            color: #00ff88;
+            text-shadow: 0 0 10px rgba(0,255,136,0.8);
+        }
+    </style>
 </head>
-
 <body>
-
-<!-- NAV -->
-<nav>
-    <h2>📘 StudentHub</h2>
-    <div>
-        <a href="./rainfall.html">Rainfall</a>
-        <a href="#pdf">PDFs</a>
-        <a href="#roadmap">Roadmaps</a>
-        <a href="#practice">Platforms</a>
-        <a href="#faq">FAQ</a>
-        <a onclick=login() >login</a>
-        <a onclick=logout() >logout</a>
-       
-        </div>
-</nav>
-
-<div class="spacer"></div>
-
-<!-- HERO -->
-<div class="hero">
-    <h1>Your Future Starts Here</h1>
-    <p>Upload PDFs, explore roadmaps, and learn together.</p>
-    <a href="./explore.html" class="hero-link">Explore Student Hub →</a>
-</div>
-
-<!-- FEATURED CAMPUS IMAGES -->
-<section id="gallery">
-  <div class="box">
-    <div class="section-title">
-      <h2>🏞 Featured Campus Moments</h2>
-      <p>Swipe through inspiring student life and learning spaces.</p>
-    </div>
-
-    <div class="image-strip">
-      <div class="image-track">
-        <img src="https://images.pexels.com/photos/7092613/pexels-photo-7092613.jpeg" alt="Students studying">
-        <img src="https://images.pexels.com/photos/256541/pexels-photo-256541.jpeg" alt="Library">
-        <img src="https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg" alt="Campus sunset">
-        <img src="https://images.pexels.com/photos/4145190/pexels-photo-4145190.jpeg" alt="Project discussion">
-        <img src="https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg" alt="Classroom">
-        <img src="https://images.pexels.com/photos/7092613/pexels-photo-7092613.jpeg" alt="Online learning">
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PDF SECTION -->
-<section id="pdf">
-    <div class="box">
-        <div class="section-title">
-            <h2>📄 Upload PDFs</h2>
-            <p>Store notes, question papers and guides with cover images.</p>
+    <div class="login-form" id="loginFormCard">
+        <h2>StudentHub</h2>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showLogin()">Login</button>
+            <button class="tab-btn" onclick="showSignup()">Signup</button>
         </div>
 
-        <form id="pdfForm">
-            <input type="text" name="title" placeholder="PDF Title" required>
-            Upload the PDF under the section<input type="file" name="file" placeholder="PDF upload"required>
-            Upload the Image  under the section<input type="file" name="image" placeholder="image upload" required>
-            <button class="upload" type="submit">Upload PDF</button>
-           <input
-    type="text"
-    id="pdfSearch"
-    placeholder="🔍 Search PDF by subject..."
-    onkeyup="filterPDFs()"
-    style="
-        width:100%;
-        padding:14px;
-        margin:16px 0;
-        border-radius:10px;
-        border:none;
-        background:#1b1b1b;
-        color:#fff;
-    "
->
-
-
-    </form>
-
-        <div id="pdfList" class="list-grid"></div>
-    </div>
-</section>
-
-<!-- ROADMAP SECTION -->
-<section id="roadmap">
-    <div class="box">
-        <div class="section-title">
-            <h2>🗺 Learning Roadmaps</h2>
-            <p>Create visual plans with short descriptions and thumbnails.</p>
+        <div id="login-form" class="form-section active">
+            <form id="loginForm">
+                <input type="text" class="input-field" id="login-user" placeholder="Username" required>
+                <input type="password" class="input-field" id="login-pass" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <div id="login-msg"></div>
         </div>
 
-        <form id="roadmapForm">
-            <input type="text" name="title" placeholder="Roadmap Title" required>
-            <textarea name="description" placeholder="Description" required></textarea>
-            <input type="file" name="image" required>
-            <button class="upload" type="submit">Upload Roadmap</button>
-            <input
-  type="text"
-  id="roadmapSearch"
-  class="search-box"
-  placeholder="🔍 Search Roadmap..."
-  onkeyup="filterRoadmaps()"
-/>
-
-
-
-        </form>
-
-        <div id="roadmapList" class="list-grid"></div>
-    </div>
-</section>
-
-<!-- interview Section -->
-<section id="interview">
-  <div class="box">
-    <div class="section-title">
-      <h2>🎯 Interview Questions</h2>
-      <p>Company-wise & role-based interview question PDFs</p>
-    </div>
-
-    <form id="interviewForm">
-      <input type="text" name="company" placeholder="Company Name" required>
-      <input type="text" name="role" placeholder="Role (Frontend, Backend...)" required>
-      <input type="file" name="file" required>
-      <button type="submit">Upload Interview PDF</button>
-    </form>
-
-   <input
-  type="text"
-  id="interviewSearch"
-  class="search-box"
-  placeholder="🔍 Search by company or role..."
-  onkeyup="filterInterviews()"
-/>
-
-
-
-
-
-    <div id="interviewList" class="list-grid"></div>
-  </div>
-</section>
-
-
-
-
-<!-- scrolling purpose -->
-
-<!-- MAIN CONTAINER (NO BODY STYLING USED) -->
-<div class="brm-container">
-
-  <!-- HEADER -->
-  <div class="brm-header">
-    <h1 class="brm-title">Books & Roadmaps</h1>
-    <p class="brm-subtitle">Hover to pause • Click to explore</p>
-  </div>
-
-  <!-- SCROLL SECTION -->
-  <div class="brm-scroll-wrapper">
-    <div class="brm-scroll-track">
-
-      <!-- CARD -->
-      <div class="brm-card" onclick="brmOpenModal(this)">
-        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" class="brm-card-img">
-        <div class="brm-card-body">
-          <h3 class="brm-card-title">Python Roadmap</h3>
-          <p class="brm-card-desc">Beginner to advanced Python learning path.</p>
+        <div id="signup-form" class="form-section">
+            <form id="signupForm">
+                <input type="text" class="input-field" id="signup-user" placeholder="Username" required>
+                <input type="password" class="input-field" id="signup-pass" placeholder="Password" required>
+                <input type="email" class="input-field" id="signup-email" placeholder="Email" required>
+                <!-- <input type="tel" class="input-field" id="signup-mobile" placeholder="Mobile (optional)"> -->
+                <button type="submit">Create Account</button>
+            </form>
+            <div id="signup-msg"></div>
         </div>
-      </div>
+    </div>
 
-      <div class="brm-card" onclick="brmOpenModal(this)">
-        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794" class="brm-card-img">
-        <div class="brm-card-body">
-          <h3 class="brm-card-title">Web Development</h3>
-          <p class="brm-card-desc">HTML, CSS, JavaScript full roadmap.</p>
+    <div class="success-popup" id="success-popup">
+        <div class="popup-content">
+            <h2>✅ Welcome!</h2>
+            <p style="color:whitesmoke !important">Opening the StudentHub Portal...</p>
+            <button onclick="openIndex()"> Click here to upload a PDF for students✨</button>
         </div>
-      </div>
-
-      <div class="brm-card" onclick="brmOpenModal(this)">
-        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" class="brm-card-img">
-        <div class="brm-card-body">
-          <h3 class="brm-card-title">Frontend Engineer</h3>
-          <p class="brm-card-desc">React, UI design & performance skills.</p>
-        </div>
-      </div>
-
-      <!-- DUPLICATE FOR INFINITE LOOP -->
-      <div class="brm-card" onclick="brmOpenModal(this)">
-        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" class="brm-card-img">
-        <div class="brm-card-body">
-          <h3 class="brm-card-title">Python Roadmap</h3>
-          <p class="brm-card-desc">Beginner to advanced Python learning path.</p>
-        </div>
-      </div>
-
-       <!-- CARD -->
-      <div class="brm-card" onclick="brmOpenModal(this)">
-        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" class="brm-card-img">
-        <div class="brm-card-body">
-          <h3 class="brm-card-title">Python Roadmap</h3>
-          <p class="brm-card-desc">Beginner to advanced Python learning path.</p>
-        </div>
-      </div>
-
-      <div class="brm-card" onclick="brmOpenModal(this)">
-        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794" class="brm-card-img">
-        <div class="brm-card-body">
-          <h3 class="brm-card-title">Web Development</h3>
-          <p class="brm-card-desc">HTML, CSS, JavaScript full roadmap.</p>
-        </div>
-      </div>
-
-      <div class="brm-card" onclick="brmOpenModal(this)">
-        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" class="brm-card-img">
-        <div class="brm-card-body">
-          <h3 class="brm-card-title">Frontend Engineer</h3>
-          <p class="brm-card-desc">React, UI design & performance skills.</p>
-        </div>
-      </div>
-
-      <!-- DUPLICATE FOR INFINITE LOOP -->
-      <div class="brm-card" onclick="brmOpenModal(this)">
-        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" class="brm-card-img">
-        <div class="brm-card-body">
-          <h3 class="brm-card-title">Python Roadmap</h3>
-          <p class="brm-card-desc">Beginner to advanced Python learning path.</p>
-        </div>
-      </div>
-
-
-    </div>
-  </div>
-
-  <!-- MODAL -->
-  <div class="brm-modal-overlay" id="brmModal">
-    <div class="brm-modal-box">
-      <span class="brm-modal-close" onclick="brmCloseModal()">✖</span>
-      <img id="brmModalImg" class="brm-modal-img">
-      <h2 id="brmModalTitle"></h2>
-      <p id="brmModalDesc"></p>
-    </div>
-  </div>
-
-</div>
-
-
-<!-- TRENDING TOPICS -->
-<section id="trending">
-  <div class="box">
-    <div class="section-title">
-      <h2>🔥 Trending Topics</h2>
-      <p>Quick filters to explore the most active learning areas.</p>
     </div>
 
-    <div class="chip-row">
-      <button class="chip"><a style="text-decoration: none; color:white" href="https://www.geeksforgeeks.org/python/python-programming-language-tutorial/">Python Basics</a></button>
-      <button class="chip"> <a style="text-decoration: none; color:white" href="https://www.geeksforgeeks.org/python/django-tutorial/">Python Basics</a>Django Projects</button>
-      <button class="chip"><a style="text-decoration: none; color:white" href="https://www.geeksforgeeks.org/dbms/dbms/"></a>DBMS Notes</button>
-      <button class="chip"><a style="text-decoration: none; color:white" href="https://www.geeksforgeeks.org/gate/original-gate-previous-year-question-papers-cse-and-it-gq/"></a>Previous Year Papers</button>
-      <button class="chip"><a style="text-decoration: none; color:white" href="https://www.geeksforgeeks.org/blogs/frontend-vs-backend/"></a>Frontend Practice</button>
-      <button class="chip"><a style="text-decoration: none; color:white" href="https://www.geeksforgeeks.org/blogs/soft-skills-interview-questions-and-answers/"></a>Interview Questions</button>
-    </div>
-  </div>
-</section>
+    <script>
+const API = "https://findpdf-3-z8us.onrender.com/api/";
 
-<!-- PRACTICE PLATFORMS (LeetCode / GFG / etc.) -->
-<section id="practice">
-  <div class="box">
-    <div class="section-title">
-      <h2>💻 Practice Platforms</h2>
-      <p>Top online platforms to practice DSA, competitive programming and web dev.</p>
-    </div>
+// ---------------- REAL SIGNUP ----------------
+document.getElementById('signupForm').onsubmit = async function(e) {
+    e.preventDefault();
+    let user = document.getElementById('signup-user').value;
+    let pass = document.getElementById('signup-pass').value;
+    let email = document.getElementById('signup-email').value;
 
-    <div class="platform-grid">
-      <div class="platform-card">
-        <h3>LeetCode</h3>
-        <p>Best for interview-style DSA questions and company-wise problem lists.</p>
-        <p class="platform-meta">Focus: DSA • Interview prep • Contests</p>
-        <a href="https://leetcode.com" target="_blank" rel="noopener noreferrer">Go to LeetCode ↗</a>
-      </div>
+    const res = await fetch(API + "signup/", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            username: user,
+            password: pass,
+            email: email
+        })
+    });
 
-      <div class="platform-card">
-        <h3>GeeksforGeeks</h3>
-        <p>Huge collection of tutorials plus practice problems with detailed articles.</p>
-        <p class="platform-meta">Focus: Concepts • DSA practice • Notes</p>
-        <a href="https://practice.geeksforgeeks.org" target="_blank" rel="noopener noreferrer">Open GfG Practice ↗</a>
-      </div>
+    const data = await res.json();
 
-      <div class="platform-card">
-        <h3>HackerRank</h3>
-        <p>Beginner‑friendly coding challenges with multiple domains and certificates.</p>
-        <p class="platform-meta">Focus: Basics • Domains • SQL</p>
-        <a href="https://www.hackerrank.com" target="_blank" rel="noopener noreferrer">Practice on HackerRank ↗</a>
-      </div>
+    if (res.ok) {
+        document.getElementById('signup-msg').innerHTML =
+            '<div class="success">Account created successfully! Now login.</div>';
+        setTimeout(showLogin, 1500);
+    } else {
+        document.getElementById('signup-msg').innerHTML =
+            `<div class="error">${data.error}</div>`;
+    }
+};
 
-      <div class="platform-card">
-        <h3>CodeChef</h3>
-        <p>Good for long and short contests and improving speed in competitive coding.</p>
-        <p class="platform-meta">Focus: Contests • CP ladder</p>
-        <a href="https://www.codechef.com" target="_blank" rel="noopener noreferrer">Visit CodeChef ↗</a>
-      </div>
+// ---------------- REAL LOGIN (JWT FIXED) ----------------
+document.getElementById('loginForm').onsubmit = async function(e) {
+    e.preventDefault();
 
-      <div class="platform-card">
-        <h3>Codeforces</h3>
-        <p>Popular competitive programming site with frequent rated contests.</p>
-        <p class="platform-meta">Focus: CP • Advanced problem solving</p>
-        <a href="https://codeforces.com" target="_blank" rel="noopener noreferrer">Go to Codeforces ↗</a>
-      </div>
+    let user = document.getElementById('login-user').value;
+    let pass = document.getElementById('login-pass').value;
 
-      <div class="platform-card">
-        <h3>freeCodeCamp</h3>
-        <p>Project‑based web development tracks with certification and practice.</p>
-        <p class="platform-meta">Focus: Web dev • JS • Projects</p>
-        <a href="https://www.freecodecamp.org" target="_blank" rel="noopener noreferrer">Start freeCodeCamp ↗</a>
-      </div>
-    </div>
-  </div>
-</section>
+    const res = await fetch(API + "login/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            username: user,
+            password: pass
+        })
+    });
 
-<!-- SCROLLING TECHNOLOGIES STRIP -->
-<div class="scroll-box">
-    <div class="scroll-text">
-        <span>Python</span>
-        <span>Django</span>
-        <span>MySQL</span>
-        <span>HTML</span>
-        <span>CSS</span>
-        <span>JavaScript</span>
-        <span>Interview Prep</span>
-    </div>
-</div>
+    const data = await res.json();
 
-<!-- COMMUNITY STATS -->
-<section id="community">
-  <div class="box">
-    <div class="section-title">
-      <h2>👥 Community Pulse</h2>
-      <p>See how active the StudentHub community is right now.</p>
-    </div>
+    if (!res.ok) {
+        alert(data.error || "Login failed");
+        return;
+    }
 
-    <div class="stats-grid">
-      <div class="stat-card">
-        <h3>120+</h3>
-        <p>Uploaded PDFs this month</p>
-      </div>
-      <div class="stat-card">
-        <h3>35</h3>
-        <p>Active roadmap creators</p>
-      </div>
-      <div class="stat-card">
-        <h3>480+</h3>
-        <p>Students using StudentHub</p>
-      </div>
-    </div>
-  </div>
-</section>
+    // 🔐 SAVE JWT TOKENS
+    localStorage.setItem("access", data.access);
+    localStorage.setItem("refresh", data.refresh);
+    localStorage.setItem("username", data.username);
 
-<!-- FAQ -->
-<section id="faq">
-    <div class="box">
-        <div class="section-title">
-            <h2>❓ FAQs</h2>
-            <p>Common questions about who can upload and how data is visible.</p>
-        </div>
-        <details>
-            <summary>Who can upload PDFs?</summary>
-            <p>Any student can upload learning PDFs.</p>
-        </details>
-        <details>
-            <summary>Are uploads visible to everyone?</summary>
-            <p>Yes, all uploaded content is public.</p>
-        </details>
-        <details>
-            <summary>Is this project beginner friendly?</summary>
-            <p>Yes, this project is designed for beginners.</p>
-        </details>
-
-        <details>
-            <summary>Who can upload PDFs?</summary>
-            <p>Any student can upload learning PDFs.</p>
-        </details>
-        <details>
-            <summary>Are uploads visible to everyone?</summary>
-            <p>Yes, all uploaded content is public.</p>
-        </details>
-        <details>
-            <summary>Is this project beginner friendly?</summary>
-            <p>Yes, this project is designed for beginners.</p>
-        </details>
-    </div>
-</section>
-
-<!-- SUCCESS STORIES -->
-<section id="stories">
-  <div class="box">
-    <div class="section-title">
-      <h2>🌟 Student Stories</h2>
-      <p>Learners who used StudentHub to crack interviews and exams.</p>
-    </div>
-
-    <div class="story-row">
-      <article class="story">
-        <h3>Aman • BCA</h3>
-        <p>"I revised complete DBMS from shared PDFs and cracked an internship in 2 weeks."</p>
-      </article>
-      <article class="story">
-        <h3>Riya • MCA</h3>
-        <p>"The Django roadmap helped me build my first full-stack project for placement."</p>
-      </article>
-      <article class="story">
-        <h3>Vikram • CS</h3>
-        <p>"Uploading notes for juniors keeps me consistent and improves my own concepts."</p>
-      </article>
-    </div>
-  </div>
-</section>
-
-<footer class="footer">
-  <div class="footer-container">
-
-    <div class="footer-box">
-      <h3>Student Hub</h3>
-      <p>Upload, share & explore PDFs and Roadmaps for better learning.</p>
-    </div>
-
-    <div class="footer-box">
-      <h4>Quick Links</h4>
-      <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Upload PDF</a></li>
-        <li><a href="#">Roadmaps</a></li>
-        <li><a href="#">Login</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-box">
-      <h4>Connect</h4>
-      <div class="socials">
-        <a href="#">🌐</a>
-        <a href="#">📘</a>
-        <a href="#">📸</a>
-        <a href="#">🐦</a>
-      </div>
-    </div>
-
-  </div>
-
-  <p class="copyright">
-    © 2026 Student Hub | Built with ❤️
-  </p>
-</footer>
-
-
-<button id="backTop">↑ Top</button>
-
-<script src="index.js"></script>
+    // Redirect
+    if (data.is_admin) {
+        window.location.href = "admin.html";
+    } else {
+        window.location.href = "main.html";
+    }
+};
+</script>
 
 </body>
 </html>

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Resource Hub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- GOOGLE FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="mian.css">
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+    <h2>📘 StudentHub</h2>
+    <div>
+        <a href="./rainfall.html">Rainfall</a>
+        <a href="#pdf">PDFs</a>
+        <a href="#roadmap">Roadmaps</a>
+        <a href="#practice">Platforms</a>
+        <a href="#faq">FAQ</a>
+        <a onclick=login() >login</a>
+        <a onclick=logout() >logout</a>
+       
+        </div>
+</nav>
+
+<div class="spacer"></div>
+
+<!-- HERO -->
+<div class="hero">
+    <h1>Your Future Starts Here</h1>
+    <p>Upload PDFs, explore roadmaps, and learn together.</p>
+    <a href="./explore.html" class="hero-link">Explore Student Hub →</a>
+</div>
+
+<!-- FEATURED CAMPUS IMAGES -->
+<section id="gallery">
+  <div class="box">
+    <div class="section-title">
+      <h2>🏞 Featured Campus Moments</h2>
+      <p>Swipe through inspiring student life and learning spaces.</p>
+    </div>
+
+    <div class="image-strip">
+      <div class="image-track">
+        <img src="https://images.pexels.com/photos/7092613/pexels-photo-7092613.jpeg" alt="Students studying">
+        <img src="https://images.pexels.com/photos/256541/pexels-photo-256541.jpeg" alt="Library">
+        <img src="https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg" alt="Campus sunset">
+        <img src="https://images.pexels.com/photos/4145190/pexels-photo-4145190.jpeg" alt="Project discussion">
+        <img src="https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg" alt="Classroom">
+        <img src="https://images.pexels.com/photos/7092613/pexels-photo-7092613.jpeg" alt="Online learning">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PDF SECTION -->
+<section id="pdf">
+    <div class="box">
+        <div class="section-title">
+            <h2>📄 Upload PDFs</h2>
+            <p>Store notes, question papers and guides with cover images.</p>
+        </div>
+
+        <form id="pdfForm">
+            <input type="text" name="title" placeholder="PDF Title" required>
+            Upload the PDF under the section<input type="file" name="file" placeholder="PDF upload"required>
+            Upload the Image  under the section<input type="file" name="image" placeholder="image upload" required>
+            <button class="upload" type="submit">Upload PDF</button>
+           <input
+    type="text"
+    id="pdfSearch"
+    placeholder="🔍 Search PDF by subject..."
+    onkeyup="filterPDFs()"
+    style="
+        width:100%;
+        padding:14px;
+        margin:16px 0;
+        border-radius:10px;
+        border:none;
+        background:#1b1b1b;
+        color:#fff;
+    "
+>
+
+
+    </form>
+
+        <div id="pdfList" class="list-grid"></div>
+    </div>
+</section>
+
+<!-- ROADMAP SECTION -->
+<section id="roadmap">
+    <div class="box">
+        <div class="section-title">
+            <h2>🗺 Learning Roadmaps</h2>
+            <p>Create visual plans with short descriptions and thumbnails.</p>
+        </div>
+
+        <form id="roadmapForm">
+            <input type="text" name="title" placeholder="Roadmap Title" required>
+            <textarea name="description" placeholder="Description" required></textarea>
+            <input type="file" name="image" required>
+            <button class="upload" type="submit">Upload Roadmap</button>
+            <input
+  type="text"
+  id="roadmapSearch"
+  class="search-box"
+  placeholder="🔍 Search Roadmap..."
+  onkeyup="filterRoadmaps()"
+/>
+
+
+
+        </form>
+
+        <div id="roadmapList" class="list-grid"></div>
+    </div>
+</section>
+
+<!-- interview Section -->
+<section id="interview">
+  <div class="box">
+    <div class="section-title">
+      <h2>🎯 Interview Questions</h2>
+      <p>Company-wise & role-based interview question PDFs</p>
+    </div>
+
+    <form id="interviewForm">
+      <input type="text" name="company" placeholder="Company Name" required>
+      <input type="text" name="role" placeholder="Role (Frontend, Backend...)" required>
+      <input type="file" name="file" required>
+      <button type="submit">Upload Interview PDF</button>
+    </form>
+
+   <input
+  type="text"
+  id="interviewSearch"
+  class="search-box"
+  placeholder="🔍 Search by company or role..."
+  onkeyup="filterInterviews()"
+/>
+
+
+
+
+
+    <div id="interviewList" class="list-grid"></div>
+  </div>
+</section>
+
+
+
+
+<!-- scrolling purpose -->
+
+<!-- MAIN CONTAINER (NO BODY STYLING USED) -->
+<div class="brm-container">
+
+  <!-- HEADER -->
+  <div class="brm-header">
+    <h1 class="brm-title">Books & Roadmaps</h1>
+    <p class="brm-subtitle">Hover to pause • Click to explore</p>
+  </div>
+
+  <!-- SCROLL SECTION -->
+  <div class="brm-scroll-wrapper">
+    <div class="brm-scroll-track">
+
+      <!-- CARD -->
+      <div class="brm-card" onclick="brmOpenModal(this)">
+        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" class="brm-card-img">
+        <div class="brm-card-body">
+          <h3 class="brm-card-title">Python Roadmap</h3>
+          <p class="brm-card-desc">Beginner to advanced Python learning path.</p>
+        </div>
+      </div>
+
+      <div class="brm-card" onclick="brmOpenModal(this)">
+        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794" class="brm-card-img">
+        <div class="brm-card-body">
+          <h3 class="brm-card-title">Web Development</h3>
+          <p class="brm-card-desc">HTML, CSS, JavaScript full roadmap.</p>
+        </div>
+      </div>
+
+      <div class="brm-card" onclick="brmOpenModal(this)">
+        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" class="brm-card-img">
+        <div class="brm-card-body">
+          <h3 class="brm-card-title">Frontend Engineer</h3>
+          <p class="brm-card-desc">React, UI design & performance skills.</p>
+        </div>
+      </div>
+
+      <!-- DUPLICATE FOR INFINITE LOOP -->
+      <div class="brm-card" onclick="brmOpenModal(this)">
+        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" class="brm-card-img">
+        <div class="brm-card-body">
+          <h3 class="brm-card-title">Python Roadmap</h3>
+          <p class="brm-card-desc">Beginner to advanced Python learning path.</p>
+        </div>
+      </div>
+
+       <!-- CARD -->
+      <div class="brm-card" onclick="brmOpenModal(this)">
+        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" class="brm-card-img">
+        <div class="brm-card-body">
+          <h3 class="brm-card-title">Python Roadmap</h3>
+          <p class="brm-card-desc">Beginner to advanced Python learning path.</p>
+        </div>
+      </div>
+
+      <div class="brm-card" onclick="brmOpenModal(this)">
+        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794" class="brm-card-img">
+        <div class="brm-card-body">
+          <h3 class="brm-card-title">Web Development</h3>
+          <p class="brm-card-desc">HTML, CSS, JavaScript full roadmap.</p>
+        </div>
+      </div>
+
+      <div class="brm-card" onclick="brmOpenModal(this)">
+        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" class="brm-card-img">
+        <div class="brm-card-body">
+          <h3 class="brm-card-title">Frontend Engineer</h3>
+          <p class="brm-card-desc">React, UI design & performance skills.</p>
+        </div>
+      </div>
+
+      <!-- DUPLICATE FOR INFINITE LOOP -->
+      <div class="brm-card" onclick="brmOpenModal(this)">
+        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" class="brm-card-img">
+        <div class="brm-card-body">
+          <h3 class="brm-card-title">Python Roadmap</h3>
+          <p class="brm-card-desc">Beginner to advanced Python learning path.</p>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="brm-modal-overlay" id="brmModal">
+    <div class="brm-modal-box">
+      <span class="brm-modal-close" onclick="brmCloseModal()">✖</span>
+      <img id="brmModalImg" class="brm-modal-img">
+      <h2 id="brmModalTitle"></h2>
+      <p id="brmModalDesc"></p>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- TRENDING TOPICS -->
+<section id="trending">
+  <div class="box">
+    <div class="section-title">
+      <h2>🔥 Trending Topics</h2>
+      <p>Quick filters to explore the most active learning areas.</p>
+    </div>
+
+    <div class="chip-row">
+      <button class="chip"><a style="text-decoration: none; color:white" href="https://www.geeksforgeeks.org/python/python-programming-language-tutorial/">Python Basics</a></button>
+      <button class="chip"> <a style="text-decoration: none; color:white" href="https://www.geeksforgeeks.org/python/django-tutorial/">Python Basics</a>Django Projects</button>
+      <button class="chip"><a style="text-decoration: none; color:white" href="https://www.geeksforgeeks.org/dbms/dbms/"></a>DBMS Notes</button>
+      <button class="chip"><a style="text-decoration: none; color:white" href="https://www.geeksforgeeks.org/gate/original-gate-previous-year-question-papers-cse-and-it-gq/"></a>Previous Year Papers</button>
+      <button class="chip"><a style="text-decoration: none; color:white" href="https://www.geeksforgeeks.org/blogs/frontend-vs-backend/"></a>Frontend Practice</button>
+      <button class="chip"><a style="text-decoration: none; color:white" href="https://www.geeksforgeeks.org/blogs/soft-skills-interview-questions-and-answers/"></a>Interview Questions</button>
+    </div>
+  </div>
+</section>
+
+<!-- PRACTICE PLATFORMS (LeetCode / GFG / etc.) -->
+<section id="practice">
+  <div class="box">
+    <div class="section-title">
+      <h2>💻 Practice Platforms</h2>
+      <p>Top online platforms to practice DSA, competitive programming and web dev.</p>
+    </div>
+
+    <div class="platform-grid">
+      <div class="platform-card">
+        <h3>LeetCode</h3>
+        <p>Best for interview-style DSA questions and company-wise problem lists.</p>
+        <p class="platform-meta">Focus: DSA • Interview prep • Contests</p>
+        <a href="https://leetcode.com" target="_blank" rel="noopener noreferrer">Go to LeetCode ↗</a>
+      </div>
+
+      <div class="platform-card">
+        <h3>GeeksforGeeks</h3>
+        <p>Huge collection of tutorials plus practice problems with detailed articles.</p>
+        <p class="platform-meta">Focus: Concepts • DSA practice • Notes</p>
+        <a href="https://practice.geeksforgeeks.org" target="_blank" rel="noopener noreferrer">Open GfG Practice ↗</a>
+      </div>
+
+      <div class="platform-card">
+        <h3>HackerRank</h3>
+        <p>Beginner‑friendly coding challenges with multiple domains and certificates.</p>
+        <p class="platform-meta">Focus: Basics • Domains • SQL</p>
+        <a href="https://www.hackerrank.com" target="_blank" rel="noopener noreferrer">Practice on HackerRank ↗</a>
+      </div>
+
+      <div class="platform-card">
+        <h3>CodeChef</h3>
+        <p>Good for long and short contests and improving speed in competitive coding.</p>
+        <p class="platform-meta">Focus: Contests • CP ladder</p>
+        <a href="https://www.codechef.com" target="_blank" rel="noopener noreferrer">Visit CodeChef ↗</a>
+      </div>
+
+      <div class="platform-card">
+        <h3>Codeforces</h3>
+        <p>Popular competitive programming site with frequent rated contests.</p>
+        <p class="platform-meta">Focus: CP • Advanced problem solving</p>
+        <a href="https://codeforces.com" target="_blank" rel="noopener noreferrer">Go to Codeforces ↗</a>
+      </div>
+
+      <div class="platform-card">
+        <h3>freeCodeCamp</h3>
+        <p>Project‑based web development tracks with certification and practice.</p>
+        <p class="platform-meta">Focus: Web dev • JS • Projects</p>
+        <a href="https://www.freecodecamp.org" target="_blank" rel="noopener noreferrer">Start freeCodeCamp ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCROLLING TECHNOLOGIES STRIP -->
+<div class="scroll-box">
+    <div class="scroll-text">
+        <span>Python</span>
+        <span>Django</span>
+        <span>MySQL</span>
+        <span>HTML</span>
+        <span>CSS</span>
+        <span>JavaScript</span>
+        <span>Interview Prep</span>
+    </div>
+</div>
+
+<!-- COMMUNITY STATS -->
+<section id="community">
+  <div class="box">
+    <div class="section-title">
+      <h2>👥 Community Pulse</h2>
+      <p>See how active the StudentHub community is right now.</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>120+</h3>
+        <p>Uploaded PDFs this month</p>
+      </div>
+      <div class="stat-card">
+        <h3>35</h3>
+        <p>Active roadmap creators</p>
+      </div>
+      <div class="stat-card">
+        <h3>480+</h3>
+        <p>Students using StudentHub</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+    <div class="box">
+        <div class="section-title">
+            <h2>❓ FAQs</h2>
+            <p>Common questions about who can upload and how data is visible.</p>
+        </div>
+        <details>
+            <summary>Who can upload PDFs?</summary>
+            <p>Any student can upload learning PDFs.</p>
+        </details>
+        <details>
+            <summary>Are uploads visible to everyone?</summary>
+            <p>Yes, all uploaded content is public.</p>
+        </details>
+        <details>
+            <summary>Is this project beginner friendly?</summary>
+            <p>Yes, this project is designed for beginners.</p>
+        </details>
+
+        <details>
+            <summary>Who can upload PDFs?</summary>
+            <p>Any student can upload learning PDFs.</p>
+        </details>
+        <details>
+            <summary>Are uploads visible to everyone?</summary>
+            <p>Yes, all uploaded content is public.</p>
+        </details>
+        <details>
+            <summary>Is this project beginner friendly?</summary>
+            <p>Yes, this project is designed for beginners.</p>
+        </details>
+    </div>
+</section>
+
+<!-- SUCCESS STORIES -->
+<section id="stories">
+  <div class="box">
+    <div class="section-title">
+      <h2>🌟 Student Stories</h2>
+      <p>Learners who used StudentHub to crack interviews and exams.</p>
+    </div>
+
+    <div class="story-row">
+      <article class="story">
+        <h3>Aman • BCA</h3>
+        <p>"I revised complete DBMS from shared PDFs and cracked an internship in 2 weeks."</p>
+      </article>
+      <article class="story">
+        <h3>Riya • MCA</h3>
+        <p>"The Django roadmap helped me build my first full-stack project for placement."</p>
+      </article>
+      <article class="story">
+        <h3>Vikram • CS</h3>
+        <p>"Uploading notes for juniors keeps me consistent and improves my own concepts."</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-container">
+
+    <div class="footer-box">
+      <h3>Student Hub</h3>
+      <p>Upload, share & explore PDFs and Roadmaps for better learning.</p>
+    </div>
+
+    <div class="footer-box">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Upload PDF</a></li>
+        <li><a href="#">Roadmaps</a></li>
+        <li><a href="#">Login</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-box">
+      <h4>Connect</h4>
+      <div class="socials">
+        <a href="#">🌐</a>
+        <a href="#">📘</a>
+        <a href="#">📸</a>
+        <a href="#">🐦</a>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="copyright">
+    © 2026 Student Hub | Built with ❤️
+  </p>
+</footer>
+
+
+<button id="backTop">↑ Top</button>
+
+<script src="main.js"></script>
+
+</body>
+</html>
