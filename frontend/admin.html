@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>StudentHub Admin</title>
   <style>
     * { box-sizing: border-box }
@@ -196,6 +198,64 @@ input[type="file"]::file-selector-button:hover {
   from { opacity:0; transform:translateY(40px) }
   to   { opacity:1; transform:translateY(0) }
 }
+/* ================= RESPONSIVE FINAL ================= */
+
+/* Tablet */
+@media screen and (max-width: 1024px) {
+  .container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Buttons in ONE LINE on tablet */
+  .item {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .item div {
+    display: flex;
+    gap: 8px;
+  }
+
+  .item button {
+    padding: 6px 14px;
+    width: auto;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 600px) {
+  .container {
+    grid-template-columns: 1fr !important;
+  }
+
+  header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Buttons STACKED on mobile */
+  .item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .item div {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .item button {
+    width: 100%;
+  }
+
+  #logoutBtn {
+    width: auto;
+    min-width: 160px;
+    align-self: center;
+  }
+}
+
 
   </style>
 </head>
