@@ -32,4 +32,9 @@ path("admin/roadmaps/<int:pk>/approve/",approve_roadmap),
 path("admin/interviews/",admin_interviews),
 path("admin/interviews/<int:pk>/approve/",approve_interview),
 
+path("admin/pdfs/<int:pk>/reject/", reject_pdf),
+path("admin/roadmaps/<int:pk>/reject/", reject_roadmap),
+path("admin/interviews/<int:pk>/reject/", reject_interview),
+
+
 ]

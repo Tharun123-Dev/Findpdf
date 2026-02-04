@@ -33,7 +33,6 @@
       padding: 20px;
       box-shadow: 0 0 30px rgba(0,0,0,0.5);
     }
-
     .section h2 {
       margin-top: 0;
       color: #22d3ee;
@@ -74,11 +73,141 @@
       opacity: 0.5;
       font-size: 14px;
     }
+
+  #logoutBtn {
+  background: linear-gradient(135deg,#22c55e,#16a34a);
+  color: #000;
+  border: none;
+  padding: 10px 26px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(34,197,94,.6);
+  transition: 0.3s;
+}
+
+#logoutBtn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 0 40px rgba(34,197,94,.9);
+}
+
+
+
+
+    /* ================= ADMIN UPLOAD GLASS STYLE ================= */
+
+#adminPdfForm,
+#adminRoadmapForm,
+#adminInterviewForm {
+  max-width: 600px;
+  margin: 28px auto;
+  background: rgba(0,0,0,0.7);
+  padding: 28px 32px 34px;
+  border-radius: 22px;
+  box-shadow:
+      0 30px 60px rgba(0,0,0,0.95),
+      inset 0 0 0 1px rgba(255,255,255,.05);
+  animation: fadeUp 0.9s ease;
+}
+
+/* Section headings */
+h4 {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 1.4rem;
+  color: #22d3ee;
+}
+
+/* Inputs */
+#adminPdfForm input,
+#adminPdfForm textarea,
+#adminRoadmapForm input,
+#adminRoadmapForm textarea,
+#adminInterviewForm input {
+  width: 100%;
+  padding: 14px 16px;
+  margin: 14px 0;
+  border-radius: 12px;
+  border: none;
+  background: #1b1b1b;
+  color: #fff;
+  font-size: 0.95rem;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.05);
+}
+
+/* File inputs */
+#adminPdfForm input[type="file"],
+#adminRoadmapForm input[type="file"],
+#adminInterviewForm input[type="file"] {
+  padding: 10px;
+  background: #141414;
+}
+
+/* File button */
+input[type="file"]::file-selector-button {
+  background: linear-gradient(135deg, #f8fafc, #e5e7eb);
+  color: #111827;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 14px;
+  box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.4),
+      0 4px 10px rgba(0,0,0,0.4);
+  transition: 0.25s;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background: linear-gradient(135deg, #ffffff, #e5e7eb);
+  transform: translateY(-1px);
+}
+
+/* Upload buttons */
+#adminPdfForm button,
+#adminRoadmapForm button,
+#adminInterviewForm button {
+  width: 100%;
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #000;
+  background: linear-gradient(135deg,#22c55e,#16a34a);
+  cursor: pointer;
+  box-shadow: 0 0 25px rgba(34,197,94,.45);
+  transition: 0.3s;
+}
+
+#adminPdfForm button:hover,
+#adminRoadmapForm button:hover,
+#adminInterviewForm button:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 
+      0 0 40px rgba(34,197,94,.7),
+      0 0 70px rgba(34,197,94,.4);
+}
+
+/* Animation (same as main) */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(40px) }
+  to   { opacity:1; transform:translateY(0) }
+}
+
   </style>
 </head>
 <body>
 
-<header>Admin Dashboard</header>
+<header style="display:flex;justify-content:space-between;align-items:center;">
+  <span>Admin Dashboard</span>
+  <button id="logoutBtn" onclick="logout()" >
+    Logout
+  </button>
+</header>
+
 
 <div class="container">
   <div class="section">
@@ -96,11 +225,45 @@
     <div id="interviews"></div>
   </div>
 </div>
+<div class="section">
+  <h2>➕ Admin Upload</h2>
+
+  <h4>Upload PDF</h4>
+  <form id="adminPdfForm">
+    <input type="text" name="title" placeholder="Title" required>
+    <input type="file" name="file" accept="application/pdf">
+    <input type="file" name="image" accept="image/*">
+    <button type="submit">Upload PDF</button>
+  </form>
+
+  <h4>Upload Roadmap</h4>
+  <form id="adminRoadmapForm">
+    <input type="text" name="title" placeholder="Title" required>
+    <textarea name="description" placeholder="Description"></textarea>
+    <input type="file" name="image" accept="image/*">
+    <button type="submit">Upload Roadmap</button>
+  </form>
+
+  <h4>Upload Interview</h4>
+  <form id="adminInterviewForm">
+    <input type="text" name="company" placeholder="Company" required>
+    <input type="text" name="role" placeholder="Role" required>
+    <input type="file" name="file" accept="application/pdf">
+    <button type="submit">Upload Interview</button>
+  </form>
+</div>
+
 
 <script>
-// const API = "http://127.0.0.1:8000/api/";
-const API = "https://findpdf-5-z3yx.onrender.com/api/";
+const API = "http://127.0.0.1:8000/api/";
+// const API = "https://findpdf-5-z3yx.onrender.com/api/";
 
+
+
+function logout() {
+  localStorage.clear();   // remove JWT tokens
+  window.location.href = "index.html";
+}
 
 // ================= AUTH CHECK =================
 function checkAdminAuth() {
@@ -162,10 +325,15 @@ function render(div, list, type) {
   el.innerHTML = list.map(i => `
     <div class="item">
       <span>${i.title || i.company}</span>
-      <button onclick="approve('${type}', ${i.id})">Approve</button>
+      <div>
+        <button onclick="openItem('${type}', ${i.id})">Open</button>
+        <button onclick="approve('${type}', ${i.id})">Approve</button>
+        <button onclick="rejectItem('${type}', ${i.id})" style="background:red">Reject</button>
+      </div>
     </div>
   `).join("");
 }
+
 
 // ================= APPROVE =================
 async function approve(type, id) {
@@ -178,11 +346,80 @@ async function approve(type, id) {
   }
 }
 
+
+function openItem(type, id) {
+  let urlKey = type === "pdf" ? "file_url" :
+               type === "roadmap" ? "image_url" :
+               "pdf_url";
+
+  secureFetch(API + `admin/${type}s/`)
+    .then(res => res.json())
+    .then(list => {
+      const item = list.find(i => i.id === id);
+      window.open(item[urlKey], "_blank");
+    });
+}
+
+async function rejectItem(type, id) {
+  if (!confirm("Reject this item?")) return;
+
+  await secureFetch(API + `admin/${type}s/${id}/reject/`, {
+    method: "POST"
+  });
+
+  loadAdminData();
+}
+
+
+
 // ================= INIT =================
 window.addEventListener("load", () => {
   checkAdminAuth();
   loadAdminData();
 });
+
+
+// ---------- ADMIN UPLOADS ----------
+
+document.getElementById("adminPdfForm").onsubmit = async e => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+
+  await secureFetch(API + "pdfs/", {
+    method: "POST",
+    body: formData
+  });
+
+  alert("PDF uploaded & published");
+  e.target.reset();
+};
+
+document.getElementById("adminRoadmapForm").onsubmit = async e => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+
+  await secureFetch(API + "roadmaps/", {
+    method: "POST",
+    body: formData
+  });
+
+  alert("Roadmap uploaded & published");
+  e.target.reset();
+};
+
+document.getElementById("adminInterviewForm").onsubmit = async e => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+
+  await secureFetch(API + "interviews/", {
+    method: "POST",
+    body: formData
+  });
+
+  alert("Interview uploaded & published");
+  e.target.reset();
+};
+
 </script>
 
 </body>

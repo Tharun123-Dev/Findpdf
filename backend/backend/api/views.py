@@ -110,7 +110,8 @@ def pdfs(request):
                 title=title,
                 file_url=pdf_url,
                 image_url=img_url,
-                is_approved=False
+                is_approved=request.user.is_staff
+
             )
 
             return Response({
@@ -190,7 +191,8 @@ def roadmaps(request):
                 title=title,
                 description=desc,
                 image_url=img_url,
-                is_approved=False
+                is_approved=request.user.is_staff
+
             )
 
             return Response({
@@ -269,7 +271,8 @@ def interview_questions(request):
                 company=company,
                 role=role,
                 pdf_url=pdf_url,
-                is_approved=False
+                is_approved=request.user.is_staff
+
             )
 
             return Response({
@@ -388,3 +391,25 @@ def approve_interview(request, pk):
         return Response({"error": "Interview not found"}, status=404)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
+
+
+# ---------- REJECT ----------
+@api_view(["POST"])
+@permission_classes([IsAdminUser])
+def reject_pdf(request, pk):
+    PDF.objects.filter(id=pk).delete()
+    return Response({"message": "PDF rejected"})
+
+
+@api_view(["POST"])
+@permission_classes([IsAdminUser])
+def reject_roadmap(request, pk):
+    Roadmap.objects.filter(id=pk).delete()
+    return Response({"message": "Roadmap rejected"})
+
+
+@api_view(["POST"])
+@permission_classes([IsAdminUser])
+def reject_interview(request, pk):
+    InterviewQuestion.objects.filter(id=pk).delete()
+    return Response({"message": "Interview rejected"})
