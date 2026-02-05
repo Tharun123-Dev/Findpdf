@@ -1,6 +1,6 @@
 // ================= CONFIG =================
-const BACKEND = "http://127.0.0.1:8000";
-// const BACKEND = "https://findpdf-6-07u2.onrender.com";
+// const BACKEND = "http://127.0.0.1:8000";
+const BACKEND = "https://findpdf-6-07u2.onrender.com";
 
 const API = BACKEND + "/api/";
 
