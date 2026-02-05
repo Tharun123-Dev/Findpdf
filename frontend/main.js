@@ -1,6 +1,6 @@
 // ================= CONFIG =================
-// const BACKEND = "http://127.0.0.1:8000";
-const BACKEND = "https://findpdf-6-07u2.onrender.com";
+const BACKEND = "http://127.0.0.1:8000";
+// const BACKEND = "https://findpdf-6-07u2.onrender.com";
 
 const API = BACKEND + "/api/";
 
@@ -113,11 +113,37 @@ function renderPDFs(list) {
     el.innerHTML = list.map(p => `
         <div class="item">
             <h3>${p.title}</h3>
-            <img src="${p.image_url}" onclick="openInNewTab('${p.file_url}')">
-            <a href="${p.file_url}" target="_blank">Open PDF</a>
+
+            <img src="${p.image_url}"
+                 onclick="openPDF(${p.id}, '${p.file_url}')">
+
+            <a onclick="openPDF(${p.id}, '${p.file_url}')">
+                📖 Open PDF
+            </a>
+
+            <a onclick="downloadPDF(${p.id}, '${p.file_url}', '${p.title}')">
+                📥 Download PDF
+            </a>
+
+            <div class="download-count">
+                👁 ${p.view_count} views &nbsp;&nbsp;
+                ⬇ ${p.download_count} downloads
+            </div>
         </div>
     `).join("");
 }
+
+function openPDF(id, url) {
+    secureFetch(API + `pdfs/${id}/view/`, { method: "POST" });
+    openInNewTab(url);
+}
+
+function downloadPDF(id, url, title) {
+    secureFetch(API + `pdfs/${id}/download/`, { method: "POST" });
+    forceDownload(url, title + ".pdf");
+}
+
+
 function filterPDFs() {
     const text = document.getElementById("pdfSearch").value.toLowerCase().trim();
 
@@ -189,10 +215,36 @@ function renderRoadmaps(list) {
     el.innerHTML = list.map(r => `
         <div class="item">
             <h3>${r.title}</h3>
-            <img src="${r.image_url}" onclick="openInNewTab('${r.image_url}')">
+
+            <img src="${r.image_url}"
+                 onclick="openRoadmap(${r.id}, '${r.image_url}')">
+
+            <a onclick="openRoadmap(${r.id}, '${r.image_url}')">
+                🗺 Open Roadmap
+            </a>
+
+            <a onclick="downloadRoadmap(${r.id}, '${r.image_url}', '${r.title}')">
+                ⬇ Download Roadmap
+            </a>
+
+            <div class="download-count">
+                👁 ${r.view_count} views &nbsp;&nbsp;
+                ⬇ ${r.download_count} downloads
+            </div>
         </div>
     `).join("");
 }
+
+function openRoadmap(id, url) {
+    secureFetch(API + `roadmaps/${id}/view/`, { method: "POST" });
+    openInNewTab(url);
+}
+
+function downloadRoadmap(id, url, title) {
+    secureFetch(API + `roadmaps/${id}/download/`, { method: "POST" });
+    forceDownload(url, title + ".png");
+}
+
 function filterRoadmaps() {
     const text = document.getElementById("roadmapSearch").value.toLowerCase().trim();
 
@@ -264,10 +316,35 @@ function renderInterviews(list) {
         <div class="item">
             <h3>${i.company}</h3>
             <p>${i.role}</p>
-            <a href="${i.pdf_url}" target="_blank">Open</a>
+
+            <a onclick="openInterview(${i.id}, '${i.pdf_url}')">
+                📖 Open PDF
+            </a>
+
+            <a onclick="downloadInterview(${i.id}, '${i.pdf_url}', '${i.company}_${i.role}')">
+                ⬇ Download PDF
+            </a>
+
+            <div class="download-count">
+                👁 ${i.view_count} views &nbsp;&nbsp;
+                ⬇ ${i.download_count} downloads
+            </div>
         </div>
     `).join("");
 }
+
+
+function openInterview(id, url) {
+    secureFetch(API + `interviews/${id}/view/`, { method: "POST" });
+    openInNewTab(url);
+}
+
+function downloadInterview(id, url, name) {
+    secureFetch(API + `interviews/${id}/download/`, { method: "POST" });
+    forceDownload(url, name + ".pdf");
+}
+
+
 function filterInterviews() {
     const text = document.getElementById("interviewSearch").value.toLowerCase().trim();
 
