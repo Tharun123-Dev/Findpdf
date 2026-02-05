@@ -59,9 +59,17 @@ function forceDownload(url, filename) {
 }
 
 // ================= LIMITS =================
-const PDF_LIMIT = 12;
-const ROADMAP_LIMIT = 12;
-const INTERVIEW_LIMIT = 12;
+const PAGE_SIZE = 12;
+
+// PDFs
+let pdfOffset = 0;
+
+// Roadmaps
+let roadmapOffset = 0;
+
+// Interviews
+let interviewOffset = 0;
+
 
 // ================= PDF =================
 let allPDFs = [];
@@ -97,13 +105,29 @@ async function loadPDFs() {
 
     allPDFs = await res.json();
 
-    // ✅ A → Z sort
     allPDFs.sort((a, b) =>
         a.title.localeCompare(b.title, undefined, { sensitivity: "base" })
     );
 
-    renderPDFs(allPDFs.slice(0, PDF_LIMIT));
+    pdfOffset = PAGE_SIZE;
+    renderPDFs(allPDFs.slice(0, pdfOffset));
 }
+
+
+function loadMorePDFs() {
+    if (pdfOffset >= allPDFs.length) return;
+    pdfOffset += PAGE_SIZE;
+    renderPDFs(allPDFs.slice(0, pdfOffset));
+}
+
+
+document.getElementById("pdfScroll")?.addEventListener("scroll", e => {
+    const box = e.target;
+    if (box.scrollTop + box.clientHeight >= box.scrollHeight - 10) {
+        loadMorePDFs();
+    }
+});
+
 
 
 function renderPDFs(list) {
@@ -148,20 +172,19 @@ function filterPDFs() {
     const text = document.getElementById("pdfSearch").value.toLowerCase().trim();
 
     let list = allPDFs;
-
-    if (text !== "") {
-        list = allPDFs.filter(p =>
-            p.title.toLowerCase().includes(text)
-        );
+    if (text) {
+        list = allPDFs.filter(p => p.title.toLowerCase().includes(text));
     }
 
-    // ✅ Keep alphabetical order
     list.sort((a, b) =>
         a.title.localeCompare(b.title, undefined, { sensitivity: "base" })
     );
 
-    renderPDFs(list.slice(0, PDF_LIMIT));
+    pdfOffset = PAGE_SIZE;
+    renderPDFs(list.slice(0, pdfOffset));
 }
+
+
 
 
 
@@ -199,13 +222,27 @@ async function loadRoadmaps() {
 
     allRoadmaps = await res.json();
 
-    // ✅ A → Z
     allRoadmaps.sort((a, b) =>
         a.title.localeCompare(b.title, undefined, { sensitivity: "base" })
     );
 
-    renderRoadmaps(allRoadmaps.slice(0, ROADMAP_LIMIT));
+    roadmapOffset = PAGE_SIZE;
+    renderRoadmaps(allRoadmaps.slice(0, roadmapOffset));
 }
+
+function loadMoreRoadmaps() {
+    if (roadmapOffset >= allRoadmaps.length) return;
+    roadmapOffset += PAGE_SIZE;
+    renderRoadmaps(allRoadmaps.slice(0, roadmapOffset));
+}
+
+document.getElementById("roadmapScroll")?.addEventListener("scroll", e => {
+    const box = e.target;
+    if (box.scrollTop + box.clientHeight >= box.scrollHeight - 10) {
+        loadMoreRoadmaps();
+    }
+});
+
 
 
 function renderRoadmaps(list) {
@@ -249,20 +286,16 @@ function filterRoadmaps() {
     const text = document.getElementById("roadmapSearch").value.toLowerCase().trim();
 
     let list = allRoadmaps;
-
-    if (text !== "") {
+    if (text) {
         list = allRoadmaps.filter(r =>
             r.title.toLowerCase().includes(text)
         );
     }
 
-    // ✅ Alphabetical
-    list.sort((a, b) =>
-        a.title.localeCompare(b.title, undefined, { sensitivity: "base" })
-    );
-
-    renderRoadmaps(list.slice(0, ROADMAP_LIMIT));
+    roadmapOffset = PAGE_SIZE;
+    renderRoadmaps(list.slice(0, roadmapOffset));
 }
+
 
 
 // ================= INTERVIEW =================
@@ -299,14 +332,28 @@ async function loadInterviews() {
 
     allInterviews = await res.json();
 
-    // ✅ Sort by company, then role
     allInterviews.sort((a, b) => {
         const c = a.company.localeCompare(b.company, undefined, { sensitivity: "base" });
         return c !== 0 ? c : a.role.localeCompare(b.role, undefined, { sensitivity: "base" });
     });
 
-    renderInterviews(allInterviews.slice(0, INTERVIEW_LIMIT));
+    interviewOffset = PAGE_SIZE;
+    renderInterviews(allInterviews.slice(0, interviewOffset));
 }
+
+function loadMoreInterviews() {
+    if (interviewOffset >= allInterviews.length) return;
+    interviewOffset += PAGE_SIZE;
+    renderInterviews(allInterviews.slice(0, interviewOffset));
+}
+
+document.getElementById("interviewScroll")?.addEventListener("scroll", e => {
+    const box = e.target;
+    if (box.scrollTop + box.clientHeight >= box.scrollHeight - 10) {
+        loadMoreInterviews();
+    }
+});
+
 
 function renderInterviews(list) {
     const el = document.getElementById("interviewList");
@@ -349,22 +396,17 @@ function filterInterviews() {
     const text = document.getElementById("interviewSearch").value.toLowerCase().trim();
 
     let list = allInterviews;
-
-    if (text !== "") {
+    if (text) {
         list = allInterviews.filter(i =>
             i.company.toLowerCase().includes(text) ||
             i.role.toLowerCase().includes(text)
         );
     }
 
-    // ✅ Alphabetical (company → role)
-    list.sort((a, b) => {
-        const c = a.company.localeCompare(b.company, undefined, { sensitivity: "base" });
-        return c !== 0 ? c : a.role.localeCompare(b.role, undefined, { sensitivity: "base" });
-    });
-
-    renderInterviews(list.slice(0, INTERVIEW_LIMIT));
+    interviewOffset = PAGE_SIZE;
+    renderInterviews(list.slice(0, interviewOffset));
 }
+
 
 // ================= LOGOUT =================
 function logout() {
